@@ -103,15 +103,16 @@ namespace geode::utils {
         static std::mt19937 gen(rd());
         return select_randomly(start, end, gen);
     }
-    bool rndb(int variants = 2) {
+    bool rndb(int true_count_to_one_false = 1) {
         auto varsVec = std::vector<bool>();
-        auto tempb = true;
-        auto tempvariants = variants;
-        while (tempvariants > 0) {
-            tempb = !tempb;
-            tempvariants = tempvariants - 1;
-            varsVec.push_back(tempb);
+        varsVec.push_back(false);
+
+        auto variants = true_count_to_one_false;
+        while (variants > 0) {
+            variants -= 1;
+            varsVec.push_back(true);
         }
+
         auto rtn = *select_randomly(varsVec.begin(), varsVec.end());
         //log::debug("{}({}) = {} of {}", __func__, variants, rtn, varsVec);
         return rtn;
@@ -166,8 +167,8 @@ struct GJScoreKey {
 #define debug error
 #endif // GEODE_IS_ANDROID
 
-inline auto repo = std::string("user95401/GemetryTrash");
-inline auto repobranch = std::string("user95401/GemetryTrash/main");
+inline auto repo = std::string("user95401/Gemetry-Trash");
+inline auto repobranch = std::string("user95401/Gemetry-Trash/main");
 inline auto repo_lnk = std::string("https://github.com/" + repo);
 inline auto raw_content_repo_lnk = std::string("https://raw.githubusercontent.com/" + repobranch);
 

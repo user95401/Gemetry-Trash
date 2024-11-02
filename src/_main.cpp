@@ -53,7 +53,7 @@ public:
         if (created) return;
         created = true;
         shared_ref = Ref<CCParticleSystemQuad>(GameToolbox::particleFromString(
-            "200a-1a0.54a0.94a-1a90a180a0a20a1a1a0a0a0a0a0a0a1a2a0a0a0.211765a0.1a0.207843a0.1a0.207843a0.1a1a0a0a0a0a0a0a0a0a0a0a0a1a0a0a0a0a0a0a0a10a0a0a0a1a1a1a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0"
+            "200a-1a0.54a0.94a-1a90a180a0a20a1a1a0a0a0a0a0a0a2a1a0a0a0.14a0.1a0a0.1a0a0.1a1a0a0a0a0a0a0a0a0a0a0a0a1a0a0a0a0a0a0a0a5a7a0a232a1a1a0a0a0a1a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0"
             , CCParticleSystemQuad::create(), 0));
         shared_ref->setID("mouse_particle"_spr);
         shared_ref->schedule(schedule_selector(mouse_particle::sch));

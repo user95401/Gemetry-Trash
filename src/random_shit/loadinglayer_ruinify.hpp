@@ -18,10 +18,10 @@ class $modify(LoadingLayerExt, LoadingLayer) {
             auto colorID = rand() % 23;
             auto color = reinterpret_cast<LevelSelectLayer*>(bg)->colorForPage(colorID);
             bg->setColor(color);
+            bg->setZOrder(-2);
             //CCLayerGradient for idk
-            CCLayerGradient* pCCLayerGradient = CCLayerGradient::create({ 90,190,255,110 }, { 0,0,0,0 });
-            pCCLayerGradient->setBlendFunc({ GL_SRC_ALPHA, GL_ONE });//additive
-            this->addChild(pCCLayerGradient);
+            CCLayerGradient* pCCLayerGradient = CCLayerGradient::create({ 0,0,0,180 }, { 0,0,0,0 });
+            this->addChild(pCCLayerGradient, -1);
         }
 
         if(SETTING(bool, "play loading theme at resource loading")) 

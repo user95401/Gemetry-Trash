@@ -1,5 +1,5 @@
 {
-  "version": "v11011198111100121.11410197108108121.9997114101115",
+  "version": "v5354.5543.4-beta",
   "list": [
 
     "https://github.com/MathieuAR-GDPSFH/Gauntlets-Position-Fix/releases/latest/download/jecket.gauntlets_position_fix.geode",
@@ -14,8 +14,8 @@
     "https://github.com/cgytrus/SmoothParticles/releases/latest/download/cgytrus.smooth-particles.geode",
 
     "https://api.geode-sdk.org/v1/mods/hiimjustin000.more_icons/versions/latest/download",
-    "https://github.com/user95401/GemetryTrash/releases/latest/download/user95401.gemetry_trash.geode",
-    "https://raw.githubusercontent.com/user95401/GemetryTrash/main/data/mods/user95401.mainlevelseditor.geode"
+    "https://github.com/user95401/Gemetry-Trash/releases/latest/download/user95401.gemetry_trash.geode",
+    "https://raw.githubusercontent.com/user95401/Gemetry-Trash/main/data/mods/user95401.mainlevelseditor.geode"
 
   ]
 }

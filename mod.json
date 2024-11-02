@@ -1,5 +1,5 @@
 {
-	"geode": "3.8.1",
+	"geode": "3.9.0",
 	"gd": {
 		"win": "2.206",
 		"android": "2.206",
@@ -8,7 +8,7 @@
 	},
 	"id": "user95401.gemetry_trash",
 	"name": "Gemetry Trash v2.11 [ABANDONED]",
-	"version": "v11011198111100121.11410197108108121.9997114101115",
+	"version": "v5354.5543.4-beta",
 	"developer": "user95401",
 	"description": "",
 	"early-load": true,
@@ -59,7 +59,7 @@
 			"name": "No Button Anim",
 			"description": "remove effect when btn get activated",
 			"type": "bool",
-			"default": false
+			"default": true
 		},
 		"No Button UDare Dialog": {
 			"name": "No Button UDare Dialog",
@@ -99,7 +99,7 @@
 			"name": "Add Objects in Menu Game",
 			"description": "spikes and pad....",
 			"type": "bool",
-			"default": true
+			"default": false
 		},
 		"Freese Menu Game BG when Platformered": {
 			"name": "Freese Menu Game BG when Platformered",

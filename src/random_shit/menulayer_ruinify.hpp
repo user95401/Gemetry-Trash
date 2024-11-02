@@ -78,6 +78,33 @@ class $modify(MenuGameLayerExt, MenuGameLayer) {
 
         return init_result;
     }
+    $override void resetPlayer() {
+        MenuGameLayer::resetPlayer();
+
+        auto plr = m_playerObject;
+
+        auto hsv_mod = cchsv(1, 0.1, 0.1, 0, 1);
+
+        if (plr->m_iconSprite) plr->m_iconSprite->setColor(GameToolbox::transformColor(plr->m_iconSprite->getColor(), hsv_mod));
+        if (plr->m_iconSpriteSecondary)  plr->m_iconSpriteSecondary->setColor(GameToolbox::transformColor(plr->m_iconSpriteSecondary->getColor(), hsv_mod));
+        //plr->m_iconSpriteWhitener->setColor(ccBLACK);
+        plr->m_iconGlow->setColor(ccWHITE);
+        if (plr->m_vehicleSprite) plr->m_vehicleSprite->setColor(GameToolbox::transformColor(plr->m_vehicleSprite->getColor(), hsv_mod));
+        if (plr->m_vehicleSpriteSecondary) plr->m_vehicleSpriteSecondary->setColor(GameToolbox::transformColor(plr->m_vehicleSpriteSecondary->getColor(), hsv_mod));
+        //plr->m_birdVehicle->setColor(ccBLACK);
+        //plr->m_vehicleSpriteWhitener->setColor(ccBLACK);
+        plr->m_vehicleGlow->setColor(ccWHITE);
+
+        if (plr->m_robotSprite) plr->m_robotSprite->m_color = GameToolbox::transformColor(plr->m_robotSprite->m_color, hsv_mod);
+        if (plr->m_robotSprite) plr->m_robotSprite->m_secondColor = GameToolbox::transformColor(plr->m_robotSprite->m_secondColor, hsv_mod);
+        if (plr->m_robotSprite) plr->m_robotSprite->updateColors();
+        if (plr->m_robotSprite->m_glowSprite) plr->m_robotSprite->m_glowSprite->setColor(ccWHITE);
+
+        if (plr->m_spiderSprite) plr->m_spiderSprite->m_color = GameToolbox::transformColor(plr->m_spiderSprite->m_color, hsv_mod);
+        if (plr->m_spiderSprite) plr->m_spiderSprite->m_secondColor = GameToolbox::transformColor(plr->m_spiderSprite->m_secondColor, hsv_mod);
+        if (plr->m_spiderSprite) plr->m_spiderSprite->updateColors();
+        if (plr->m_spiderSprite->m_glowSprite) plr->m_spiderSprite->m_glowSprite->setColor(ccWHITE);
+    }
     $override void update(float p0) {
         MenuGameLayer::update(p0);
 
@@ -371,6 +398,10 @@ class $modify(MenuLayerExt, MenuLayer) {
         ));
         get_rand_meme_button_menu_long_var_here_for_ever->setPosition({ 230.f, 6.f });
         this->addChild(get_rand_meme_button_menu_long_var_here_for_ever);
+
+        bool static grayland_ntfy;
+        if (grayland and !grayland_ntfy) Notification::create("escape grayland")->show();
+        if (grayland_ntfy) grayland_ntfy = 0;
 
         return rtn;
     }

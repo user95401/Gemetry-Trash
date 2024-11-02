@@ -31,6 +31,6 @@ inline auto settingIsForcedPopup(auto settingName = "thats") {
 $execute{
 	mod("geode.loader")->setSettingValue("disable-last-crashed-popup", true);
     setListenerToNtfyForcedSetting("geode.loader", "disable-last-crashed-popup");
-	mod("geode.loader")->setSettingValue("enable-geode-theme", false);
+	mod("geode.loader")->setSettingValue("enable-geode-theme", true);
     setListenerToNtfyForcedSetting("geode.loader", "enable-geode-theme");
 }

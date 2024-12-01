@@ -1,5 +1,5 @@
 {
-  "version": "v5354.5543.4-beta fix2 for outdated game",
+  "version": "v5354.5543.4-beta fix3 for outdated game",
   "list": [
 
     "https://github.com/MathieuAR-GDPSFH/Gauntlets-Position-Fix/releases/latest/download/jecket.gauntlets_position_fix.geode",
@@ -9,7 +9,7 @@
     "https://github.com/geode-sdk/CustomKeybinds/releases/download/v1.9.0/geode.custom-keybinds.geode",
     "https://github.com/Cvolton/miscbugfixes-geode/releases/download/v1.2.1/cvolton.misc_bugfixes.geode",
     "https://github.com/Weebifying/restartbutton-geode/releases/download/v1.1.4/weebify.restartbtn.geode",
-    "https://github.com/Capeling/Hide-Main-Menu-UI/releases/download/v1.0.2/capeling.hide_main_menu_ui.geode",
+    "https://github.com/Capeling/Hide-Main-Menu-UI/releases/download/v1.0.3/capeling.hide_main_menu_ui.geode",
     "https://github.com/cgytrus/SmoothParticles/releases/download/v2.2.0/cgytrus.smooth-particles.geode",
 
     "https://api.geode-sdk.org/v1/mods/hiimjustin000.more_icons/versions/1.4.0/download",

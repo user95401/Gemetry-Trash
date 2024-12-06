@@ -18,10 +18,6 @@ class $modify(LoadingLayerExt, LoadingLayer) {
             auto colorID = rand() % 23;
             auto color = reinterpret_cast<LevelSelectLayer*>(bg)->colorForPage(colorID);
             bg->setColor(color);
-            bg->setZOrder(-2);
-            //CCLayerGradient for idk
-            CCLayerGradient* pCCLayerGradient = CCLayerGradient::create({ 0,0,0,180 }, { 0,0,0,0 });
-            this->addChild(pCCLayerGradient, -1);
         }
 
         if(SETTING(bool, "play loading theme at resource loading")) 
@@ -34,8 +30,8 @@ class $modify(LoadingLayerExt, LoadingLayer) {
                     "Version: {}" "\n"
                     "Geode: {}",
                     GEODE_PLATFORM_NAME,
-                    Mod::get()->getVersion().toString(),
-                    Mod::get()->getMetadata().getGeodeVersion()
+                    Mod::get()->getVersion().toVString(),
+                    Mod::get()->getMetadata().getGeodeVersion().toVString()
                 ),
                 fmt::format("gjFont{:02d}.fnt", rand() % 60).c_str(),
                 kCCTextAlignmentLeft

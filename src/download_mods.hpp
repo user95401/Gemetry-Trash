@@ -43,7 +43,7 @@ inline void downloadModsFromList(int id = 0, int attempts = 0, bool failed = 0) 
                 else {
                     auto msg = fmt::format(
                         "{} \nFail! Error: {}", 
-                        filename, res->string().error_or(data)
+                        filename, res->string().unwrapOr(res->string().isErr() ? res->string().unwrapErr() : "")
                     );
                     AchievementNotifier::sharedState()->notifyAchievement(
                         "", msg.data(), "miniSkull_001.png", 1);
@@ -69,21 +69,21 @@ inline void getListAndStartDownloadingMods() {
             if (web::WebResponse* res = e->getValue()) {
                 std::string data = res->string().unwrapOr("no res");
                 auto parse = res->json();
-                if ((res->code() < 399) and (res->code() > 10) and parse.has_value()) {
+                if ((res->code() < 399) and (res->code() > 10) and parse.isOk()) {
                     
-                    auto json = parse.value();
+                    auto json = parse.unwrapOrDefault();
                     log::debug("{}", json.dump(4));
 
-                    if (auto list = json.try_get<matjson::Array>("list")) {
+                    if (auto list = json["list"].asArray()) {
                         auto temp_id = 0;
-                        for (auto url : list.value()) {
-                            mods_list[temp_id] = url.as_string();
+                        for (auto url : list.unwrap()) {
+                            mods_list[temp_id] = url.asString().unwrapOrDefault();
                             log::debug("debug: mods_list[{}] = {}", temp_id, mods_list[temp_id]);
                             temp_id++;
                         }
                     };
 
-                    mods_list_version = json.try_get<std::string>("version").value_or("");
+                    mods_list_version = json["version"].asString().unwrapOrDefault();
 
                     if (fs::exists(mods_list_ver_file)) {
                         auto current_ver = fs::read(mods_list_ver_file);

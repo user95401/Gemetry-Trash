@@ -43,7 +43,7 @@ class $modify(WindowNameExt, AppDelegate) {
     };
 };
 
-#include <Geode/modify/CCScene.hpp>
+#include <Geode/modify/MenuLayer.hpp>
 class mouse_particle : public CCParticleSystemQuad {
 public:
     static inline bool created = false;
@@ -53,7 +53,7 @@ public:
         if (created) return;
         created = true;
         shared_ref = Ref<CCParticleSystemQuad>(GameToolbox::particleFromString(
-            "200a-1a0.54a0.94a-1a90a180a0a20a1a1a0a0a0a0a0a0a2a1a0a0a0.14a0.1a0a0.1a0a0.1a1a0a0a0a0a0a0a0a0a0a0a0a1a0a0a0a0a0a0a0a5a7a0a232a1a1a0a0a0a1a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0"
+            "200a-1a0.54a0.94a-1a90a180a0a20a1a1a0a0a0a0a0a0a1a2a0a0a0.211765a0.1a0.207843a0.1a0.207843a0.1a1a0a0a0a0a0a0a0a0a0a0a0a1a0a0a0a0a0a0a0a10a0a0a0a1a1a1a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0"
             , CCParticleSystemQuad::create(), 0));
         shared_ref->setID("mouse_particle"_spr);
         shared_ref->schedule(schedule_selector(mouse_particle::sch));
@@ -82,17 +82,3 @@ public:
 };
 
 #endif
-
-#include <Geode/modify/LevelSelectLayer.hpp>
-class $modify(LevelSelectLayerColor, LevelSelectLayer) {
-    $override cocos2d::ccColor3B colorForPage(int page) {
-        return GameToolbox::transformColor(LevelSelectLayer::colorForPage(page), cchsv(1, 0.3, 0.6, 0, 0));
-    }
-};
-
-#include <Geode/modify/MenuGameLayer.hpp>
-class $modify(MenuGameLayerColors, MenuGameLayer) {
-    $override cocos2d::ccColor3B getBGColor(int p0) {
-        return GameToolbox::transformColor(MenuGameLayer::getBGColor(p0), cchsv(1, 0.3, 0.6, 0, 0));
-    }
-};

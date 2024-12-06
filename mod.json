@@ -1,14 +1,14 @@
 {
-	"geode": "3.9.0",
+	"geode": "4.0.1",
 	"gd": {
-		"win": "2.206",
-		"android": "2.206",
-		"mac": "2.206",
-		"ios": "2.206"
+		"win": "2.2074",
+		"android": "2.2074",
+		"mac": "2.2074",
+		"ios": "2.2074"
 	},
 	"id": "user95401.gemetry_trash",
-	"name": "Gemetry Trash v2.11 [ABANDONED]",
-	"version": "v5354.5543.4-beta",
+	"name": "Gemetry Trash",
+	"version": "v3.0.0",
 	"developer": "user95401",
 	"description": "",
 	"early-load": true,
@@ -55,12 +55,6 @@
 			"type": "title",
 			"name": "Buttons"
 		},
-		"No Button Anim": {
-			"name": "No Button Anim",
-			"description": "remove effect when btn get activated",
-			"type": "bool",
-			"default": true
-		},
 		"No Button UDare Dialog": {
 			"name": "No Button UDare Dialog",
 			"description": "remove button dialog appearance",
@@ -99,7 +93,7 @@
 			"name": "Add Objects in Menu Game",
 			"description": "spikes and pad....",
 			"type": "bool",
-			"default": false
+			"default": true
 		},
 		"Freese Menu Game BG when Platformered": {
 			"name": "Freese Menu Game BG when Platformered",

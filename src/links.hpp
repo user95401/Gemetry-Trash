@@ -45,9 +45,9 @@ inline void loadLinks() {
 			if (web::WebResponse* res = e->getValue()) {
 				std::string data = res->string().unwrapOr("no res");
 				auto parse = res->json();
-				if ((res->code() < 399) and (res->code() > 10) and parse.has_value()) {
-					links = parse.value();
-					log::debug("links = {}", links);
+				if ((res->code() < 399) and (res->code() > 10) and parse.isOk()) {
+					links = parse.unwrapOrDefault();
+					log::debug("links = {}", links.dump());
 				}
 				else {
 				}
@@ -112,9 +112,9 @@ $on_mod(Loaded){
 class $modify(CCApplicationLinksReplace, CCApplication) {
 	$override void openURL(const char* url) {
 		if (links.contains(url)) {
-			url = links.try_get<std::string>(url).value_or(url).c_str();
+			url = links[url].asString().unwrapOr(url).c_str();
 		}
-		log::debug("{}.url = {}", __FUNCTION__, url);
+		//log::debug("{}.url = {}", __FUNCTION__, url);
 		return CCApplication::openURL(url);
 	}
 };

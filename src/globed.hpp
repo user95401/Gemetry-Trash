@@ -60,7 +60,7 @@ public:
 		if (ipconnect) ipconnect->activate();
 		else return log::error("{}.ipconnect = {}", __func__, ipconnect);
 
-		auto addr = typeinfo_cast<InputNode*>(this->getParent()->getChildByIDRecursive("dankmeme.globed2/direct-connection-addr"));
+		auto addr = typeinfo_cast<TextInput*>(this->getParent()->getChildByIDRecursive("dankmeme.globed2/direct-connection-addr"));
 		if (addr) addr->setString(globed_server);
 		else return log::error("{}.addr = {}", __func__, addr);
 

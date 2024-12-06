@@ -42,18 +42,18 @@ class $modify(PopupRandomMeme, CCScene) {
                     }
 
                     auto json = res->json();
-                    auto value = matjson::Value(json.value_or(json.error_or("unk err")));
+                    auto value = matjson::Value(json.unwrapOr(json.isErr() ? json.unwrapErr() : ""));
                     //log::info("{}", value);
 
-                    if (json.has_error()) return;
-                    if (value.is_array() == false) return;
+                    if (json.isErr()) return;
+                    if (value.isArray() == false) return;
                     //log::info("{}", "as_array");
                     //log::info("value {}", value);
-                    auto the_memes_list = value.as_array();
+                    auto the_memes_list = value;
                     auto rand_meme = *select_randomly(the_memes_list.begin(), the_memes_list.end());
                     //log::info("rand_meme {}", rand_meme);
                     web::WebRequest req = web::WebRequest();
-                    listener->setFilter(req.get(rand_meme.try_get<std::string>("image").value_or("no meme?(")));
+                    listener->setFilter(req.get(rand_meme["image"].asString().unwrapOr("no meme?(")));
                 }
             }
         );

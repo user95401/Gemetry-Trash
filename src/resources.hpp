@@ -214,7 +214,7 @@ class $modify(GJGarageLayerNoRandSelector, GJGarageLayer) {
                                     if (layer->getChildByID(selBG->getID())) {
                                         selBG->removeFromParentAndCleanup(0);
                                         scroll->m_verticalScrollbar->addChild(selBG);
-                                        Mod::get()->getSaveContainer().try_erase(of);
+                                        Mod::get()->getSaveContainer().erase(of);
                                     }
                                     else {
                                         selBG->removeFromParentAndCleanup(0);

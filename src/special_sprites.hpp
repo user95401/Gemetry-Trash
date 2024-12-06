@@ -1,8 +1,6 @@
 #pragma once
 #include <_main.hpp>
 
-inline static bool grayland = !rndb(3);
-
 #include <Geode/modify/CCSprite.hpp>
 class $modify(SpecialSprites, CCSprite) {
     void pulseOpacitySch(float) {
@@ -58,13 +56,7 @@ class $modify(SpecialSprites, CCSprite) {
             base_layer->scheduleOnce(schedule_selector(SpecialSprites::trySetupGradientColorSch), 0.f);
             return base_layer;
         }
-        if (string::contains(pszFileName, "geode.loader/swelve-layer")) {
-            auto base_layer = CCSprite::create(string::replace(pszFileName, "geode.loader/swelve-layer", "seveve-layer").c_str());
-            base_layer->runAction(CCRepeatForever::create(CCTintTo::create(0.f, 99,99,99)));
-            return base_layer;
-        }
-        //return 
-        return grayland ? CCSpriteGrayscale::create(pszFileName) : CCSprite::create(pszFileName);
+        return CCSprite::create(pszFileName);
     }
     $override static CCSprite* createWithSpriteFrameName(const char* pszSpriteFrameName) {
         if (string::contains(pszSpriteFrameName, "robtoplogo_small.png")) {
@@ -115,6 +107,6 @@ class $modify(SpecialSprites, CCSprite) {
             //rtn base_layer
             return base_layer;
         }
-        return grayland ? CCSpriteGrayscale::createWithSpriteFrameName(pszSpriteFrameName) : CCSprite::createWithSpriteFrameName(pszSpriteFrameName);
+        return CCSprite::createWithSpriteFrameName(pszSpriteFrameName);
     }
 };

@@ -8,6 +8,7 @@ using namespace geode::prelude;
 #include <regex>
 
 #include <_fs.hpp>
+#include <_ImGui.hpp>
 
 //lol
 #define SETTING(type, key_name) Mod::get()->getSettingValue<type>(key_name)
@@ -28,6 +29,8 @@ template<typename T, typename U> constexpr size_t OFFSET_BY_MEMBER(U T::* member
 	} c; \
 	return c.get(reinterpret_cast<FriendeeClass__*>(v)); \
 }(value)
+
+#define LOG_THIS_FILE $execute { log::debug("LOG_THIS_FILE: \n\n{}\n", fs::path(__FILE__).filename().string()); }
 
 namespace geode::cocos {
     inline std::string frameName(CCNode* node) {
@@ -103,14 +106,12 @@ namespace geode::utils {
         static std::mt19937 gen(rd());
         return select_randomly(start, end, gen);
     }
-    bool rndb(int variants = 2) {
+    bool rndb(int rarity = 1) {
         auto varsVec = std::vector<bool>();
-        auto tempb = true;
-        auto tempvariants = variants;
-        while (tempvariants > 0) {
-            tempb = !tempb;
-            tempvariants = tempvariants - 1;
-            varsVec.push_back(tempb);
+        varsVec.push_back(true);
+        while (rarity > 0) {
+            rarity = rarity - 1;
+            varsVec.push_back(false);
         }
         auto rtn = *select_randomly(varsVec.begin(), varsVec.end());
         //log::debug("{}({}) = {} of {}", __func__, variants, rtn, varsVec);

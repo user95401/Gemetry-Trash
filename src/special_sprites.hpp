@@ -1,8 +1,20 @@
 #pragma once
 #include <_main.hpp>
+//LOG_THIS_FILE;
 
 #include <Geode/modify/CCSprite.hpp>
 class $modify(SpecialSprites, CCSprite) {
+    static void onModify(auto & self) {
+        auto names = { 
+            "cocos2d::CCSprite::initWithSpriteFrameName",
+            "cocos2d::CCSprite::initWithFile",
+            "cocos2d::CCSprite::create",
+            "cocos2d::CCSprite::createWithSpriteFrameName",
+        };
+        for (auto name : names) if (!self.setHookPriorityPost(name, Priority::First)) {
+            log::error("Failed to set hook priority for {}.", name);
+        }
+    }
     void pulseOpacitySch(float) {
         if (auto sprite = typeinfo_cast<CCSprite*>(this)) {
             auto fmod = FMODAudioEngine::sharedEngine();

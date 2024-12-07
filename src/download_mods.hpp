@@ -32,7 +32,7 @@ inline void downloadModsFromList(int id = 0, int attempts = 0, bool failed = 0) 
             if (web::WebResponse* res = e->getValue()) {
                 std::string data = res->string().unwrapOr("no res");
                 if ((res->code() < 399) and (res->code() > 10)) {
-                    res->into(dirs::getModsDir() / filename);
+                    auto save_result = res->into(dirs::getModsDir() / filename);
                     auto msg = fmt::format("{}\n installed! id: {}", filename, id);
                     AchievementNotifier::sharedState()->notifyAchievement(
                         "", msg.data(), "GJ_infoIcon_001.png", 1);

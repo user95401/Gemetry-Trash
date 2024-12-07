@@ -21,7 +21,7 @@ class $modify(PopupRandomMeme, CCScene) {
                     if (string::contains(res->header("content-type").value_or("asd"), "image")) {
                         //log::info("image");
                         auto path = getMod()->getTempDir() / ".rand_meme_image";
-                        res->into(path);
+                        auto save_result = res->into(path);
                         auto sprite = CCSprite::create(path.string().c_str());
                         CCTextureCache::get()->removeTextureForKey(path.string().c_str());
                         fs::remove(path, fs::last_err_code);

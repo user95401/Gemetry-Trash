@@ -1,7 +1,5 @@
 #include "_main.hpp"
 
-#ifdef GEODE_IS_WINDOWS
-
 #include <Geode/modify/CCNode.hpp>
 class $modify(UpdateSceneScaleByScreenView, CCNode) {
     $override void visit() {
@@ -24,12 +22,21 @@ class $modify(FLAlertLayerShowupStartPointExt, CCNode) {
         if (auto casted = typeinfo_cast<FLAlertLayer*>(this)) {
             if (casted->m_mainLayer) {
                 if (casted->m_mainLayer->getContentSize().equals(CCDirector::get()->getWinSize())) {
-                    casted->m_mainLayer->setAnchorPoint(getMousePos() / casted->m_mainLayer->getContentSize());
+                    casted->m_mainLayer->setAnchorPoint(toCocos(ImGui::GetMousePos()) / casted->m_mainLayer->getContentSize());
                 }
             };
         };
+        if (auto casted = typeinfo_cast<MenuGameLayer*>(this)) {
+            if (casted->getContentSize().equals(CCDirector::get()->getWinSize())) {
+                casted->setAnchorPoint(toCocos(ImGui::GetMousePos()) / casted->getContentSize());
+                if (SETTING(bool, "Animate Menu Game")) void();
+                casted->setScale(1.005f);
+            }
+        };
     }
 };
+
+#ifdef GEODE_IS_WINDOWS
 
 #include <Geode/modify/AppDelegate.hpp>
 class $modify(WindowNameExt, AppDelegate) {

@@ -34,3 +34,8 @@ message("SRC: ${SRC}")
 include_directories(src)
 
 setup_geode_mod(${PROJECT_NAME})
+
+#ImGui lol
+
+CPMAddPackage("gh:matcool/gd-imgui-cocos#fbd4103")
+target_link_libraries(${PROJECT_NAME} imgui-cocos)

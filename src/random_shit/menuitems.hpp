@@ -21,7 +21,7 @@ class $modify(CCMenuItemDialogExt, CCMenuItem) {
     $override void activate() {
         if (SETTING(bool, "No Button UDare Dialog")) return CCMenuItem::activate();
         srand(time(0));
-        if ((rand() % 100 > 3) or findDataNode(this, "hasDialog")) {
+        if (!rndb(12) or findDataNode(this, "hasDialog")) {
             return CCMenuItem::activate();
         }
         if (auto spriteitem = typeinfo_cast<CCMenuItemSpriteExtra*>(this)) {

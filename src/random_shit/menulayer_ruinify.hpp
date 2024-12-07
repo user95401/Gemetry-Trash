@@ -44,7 +44,7 @@ class $modify(MenuGameLayerExt, MenuGameLayer) {
             //scale
             this->runAction(CCRepeatForever::create(CCSequence::create(
                 CCEaseSineInOut::create(CCScaleTo::create(10, 1.005)),// o
-                CCEaseSineInOut::create(CCScaleTo::create(10, 1.000)),// 0
+                CCEaseSineInOut::create(CCScaleTo::create(10, 1.010)),// 0
                 nullptr
             )));
         }

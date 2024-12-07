@@ -25,7 +25,7 @@ class $modify(PopupSoggyCat, CCMenuItem) {
         if (SETTING(bool, "soggy cat?")) {
             if (string::containsAny(this->getID(), { "play-button", "level-button" })) {
                 srand(time(0));
-                if ((rand() % 10 < 3)) {
+                if (rndb(6)) {
                     auto pop = createPopup();
                     pop->show();
                     PopupSoggyCat::onClick = [this]()

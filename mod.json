@@ -89,12 +89,6 @@
 			"type": "bool",
 			"default": false
 		},
-		"Add Objects in Menu Game": {
-			"name": "Add Objects in Menu Game",
-			"description": "spikes and pad....",
-			"type": "bool",
-			"default": true
-		},
 		"Freese Menu Game BG when Platformered": {
 			"name": "Freese Menu Game BG when Platformered",
 			"description": "Freese Menu Game BG when PlatformeredFreese Menu Game BG when PlatformeredFreese Menu Game BG when PlatformeredFreese Menu Game BG when Platformered....",
@@ -133,6 +127,12 @@
 		"Funny Robot Rotation": {
 			"name": "Funny Robot Rotation",
 			"description": "robot rotation acts like ship.",
+			"type": "bool",
+			"default": true
+		},
+		"Boost Rotation Thing": {
+			"name": "Boost Rotation Thing",
+			"description": "Boost Rotation ThingBoost Rotation ThingBoost Rotation ThingBoost Rotation ThingBoost Rotation Thing.",
 			"type": "bool",
 			"default": true
 		},

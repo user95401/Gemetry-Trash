@@ -11,7 +11,7 @@ class $modify(SpecialSprites, CCSprite) {
             "cocos2d::CCSprite::create",
             "cocos2d::CCSprite::createWithSpriteFrameName",
         };
-        for (auto name : names) if (!self.setHookPriorityPost(name, Priority::First)) {
+        for (auto name : names) if (!self.setHookPriorityPost(name, Priority::Last)) {
             log::error("Failed to set hook priority for {}.", name);
         }
     }

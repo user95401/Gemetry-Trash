@@ -26,6 +26,7 @@ class $modify(FLAlertLayerShowupStartPointExt, CCNode) {
                 }
             };
         };
+#ifdef GEODE_IS_WINDOWS
         if (auto casted = typeinfo_cast<MenuGameLayer*>(this)) {
             if (casted->getContentSize().equals(CCDirector::get()->getWinSize())) {
                 casted->setAnchorPoint(toCocos(ImGui::GetMousePos()) / casted->getContentSize());
@@ -34,6 +35,7 @@ class $modify(FLAlertLayerShowupStartPointExt, CCNode) {
             }
         };
     }
+#endif
 };
 
 #ifdef GEODE_IS_WINDOWS

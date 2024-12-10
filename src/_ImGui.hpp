@@ -95,7 +95,7 @@ static CCPoint toCocos(const ImVec2& pos) {
 
 #include <imgui-cocos.hpp>
 #include <Geode/modify/CCDirector.hpp>
-class $modify(ImGuiInit, CCDirector) {
+class $modify(ImGuiCocosSetup, CCDirector) {
     $override void runWithScene(CCScene * pScene) {
         CCDirector::runWithScene(pScene);
         ImGuiCocos::get().setup([] {}).draw([] {});

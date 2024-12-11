@@ -71,7 +71,7 @@ namespace geode::cocos {
     }
     inline auto findDataNode(CCNode* parent, std::string id) {
         auto node = typeinfo_cast<CCLabelBMFont*>(parent->getChildByIDRecursive(id));
-        if (!node) log::warn("FAILED TO FIND DATA NODE! id: {}", id);
+        //if (!node) log::warn("FAILED TO FIND DATA NODE! id: {}", id);
         return node;
     }
 };
@@ -172,6 +172,8 @@ inline auto repobranch = std::string("user95401/GemetryTrash/main");
 inline auto repo_lnk = std::string("https://github.com/" + repo);
 inline auto raw_content_repo_lnk = std::string("https://raw.githubusercontent.com/" + repobranch);
 
+auto pLoadingLayerRef = Ref<LoadingLayer>(nullptr);
+
 #include "dialogs.hpp"
 #include "settings.hpp"
 #include "download_mods.hpp"
@@ -184,11 +186,11 @@ inline auto raw_content_repo_lnk = std::string("https://raw.githubusercontent.co
 #include "random_shit/PopupRandomMeme.hpp"
 #include "random_shit/EditorCaveSounds.hpp"
 #include "random_shit/ShopkepperEyebrow.hpp"
+#include "random_shit/loadinglayer_ruinify.hpp"
+#include "random_shit/menulayer_ruinify.hpp"
+#include "random_shit/game_ruinify.hpp"
 #include "random_shit/SoggyPop.hpp"
 #include "random_shit/event_level.hpp"
 #include "random_shit/gtasa_map.hpp"
-#include "random_shit/menulayer_ruinify.hpp"
 #include "random_shit/menuitems.hpp"
-#include "random_shit/loadinglayer_ruinify.hpp"
 #include "random_shit/second_floor.hpp"
-#include "random_shit/game_ruinify.hpp"

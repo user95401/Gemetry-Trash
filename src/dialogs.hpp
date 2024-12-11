@@ -108,7 +108,7 @@ class $modify(CCSceneDialogs, CCScene) {
         //Who did the bite of 87
         {
             CCArray* arr = CCArray::create();
-            arr->addObject(DialogObject::create("Scratch", "Who did the bite of 87?", 13, 1.f, 0, ccWHITE));
+            arr->addObject(DialogObject::create("Scratch", rndb() ? pLoadingLayerRef->getLoadingString() : "Who did the bite of 87?", 13, 1.f, 0, ccWHITE));
             dailogs.push_back(arr);
         }
         auto dailog = *select_randomly(dailogs.begin(), dailogs.end());

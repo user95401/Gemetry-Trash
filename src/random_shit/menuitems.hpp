@@ -21,7 +21,7 @@ class $modify(CCMenuItemDialogExt, CCMenuItem) {
     $override void activate() {
         if (SETTING(bool, "No Button UDare Dialog")) return CCMenuItem::activate();
         srand(time(0));
-        if (!rndb(12) or findDataNode(this, "hasDialog")) {
+        if (!rndb(25) or findDataNode(this, "hasDialog")) {
             return CCMenuItem::activate();
         }
         if (auto spriteitem = typeinfo_cast<CCMenuItemSpriteExtra*>(this)) {
@@ -32,7 +32,7 @@ class $modify(CCMenuItemDialogExt, CCMenuItem) {
             auto* dialog = DialogLayer::createDialogLayer(
                 DialogObject::create(
                     "Button",
-                    "<cr>You dare touch me!?</c>\n<d100>Ok.",
+                    rndb(3) ? pLoadingLayerRef->getLoadingString() : "<cr>You dare touch me!?</c>\n<d100>Ok.",
                     5, 1, false, ccc3(255, 255, 255)
                 ),
                 nullptr, 1 // idk, Background

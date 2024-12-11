@@ -26,6 +26,7 @@ class $modify(FLAlertLayerShowupStartPointExt, CCNode) {
                 }
             };
         };
+#ifdef GEODE_IS_WINDOWS
         if (auto casted = typeinfo_cast<MenuGameLayer*>(this)) {
             if (casted->getContentSize().equals(CCDirector::get()->getWinSize())) {
                 casted->setAnchorPoint(toCocos(ImGui::GetMousePos()) / casted->getContentSize());
@@ -33,6 +34,7 @@ class $modify(FLAlertLayerShowupStartPointExt, CCNode) {
                 casted->setScale(1.005f);
             }
         };
+#endif
     }
 };
 
@@ -40,12 +42,19 @@ class $modify(FLAlertLayerShowupStartPointExt, CCNode) {
 
 #include <Geode/modify/AppDelegate.hpp>
 class $modify(WindowNameExt, AppDelegate) {
+    void updateForegroundWindow() {
+        SetWindowTextA(GetForegroundWindow(), fmt::format(
+            "{} {}",
+            getMod()->getName(), 
+            getMod()->getVersion().toVString()
+        ).data());
+    }
     $override void applicationWillEnterForeground() {
-        SetWindowTextA(GetForegroundWindow(), Mod::get()->getName().data());
+        updateForegroundWindow();
         return AppDelegate::applicationWillEnterForeground();
     };
     $override bool applicationDidFinishLaunching() {
-        SetWindowTextA(GetForegroundWindow(), Mod::get()->getName().data());
+        updateForegroundWindow();
         return AppDelegate::applicationDidFinishLaunching();
     };
 };

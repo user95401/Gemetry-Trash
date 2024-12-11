@@ -6,7 +6,8 @@ class $modify(LoadingLayerExt, LoadingLayer) {
     $override bool init(bool p0) {
         srand(time(0)); //bool(rand() % 2)
 
-        auto rtn = LoadingLayer::init(p0);
+        auto rtn = LoadingLayer::init(p0); 
+        pLoadingLayerRef.swap(this);
 
         auto bg = typeinfo_cast<CCSprite*>(this->getChildByID("bg-texture"));
         if (bg) {

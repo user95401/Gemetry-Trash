@@ -19,8 +19,11 @@ inline void downloadModsFromList(int id = 0, int attempts = 0, bool failed = 0) 
     auto req = web::WebRequest();
     auto listener = new EventListener<web::WebTask>;
     listener->bind(
-        [id, attempts, failed, filename](web::WebTask::Event* e) {
-            auto gonext = [id, attempts, failed](bool retry = false) {
+        [id, attempts, failed, filename, url](web::WebTask::Event* e) {
+            auto gonext = [id, attempts, failed, filename, url](bool retry = false) {
+                statusLabel->setText(fmt::format(
+                    "{}\nurl: {}\nid: {}, attempts: {}, was failed: {}", filename, url, id, attempts, failed
+                ).c_str());
                 auto nextid = id + 1;
                 auto isfailed = failed;
                 if (retry and attempts <= 6) nextid = id;
@@ -97,7 +100,7 @@ inline void getListAndStartDownloadingMods() {
                         log::debug("current_ver=\"{}\"", current_ver);
 
                         if (std::string(mods_list_version) == std::string(current_ver))
-                            return log::debug("last list was installed");
+                            return log::debug("{}", "last list was installed");
                     }
                     auto popup = createQuickPopup(
                         "Downloading mods...",
@@ -128,7 +131,7 @@ inline void getListAndStartDownloadingMods() {
         }
     );
     listener->setFilter(req.send(
-        "GET", (raw_content_repo_lnk + "/data/" + "/mods.list.json")
+        "GET", (raw_content_repo_lnk + "/data/" + "/mods.list.v3.json")
     ));
 }
 

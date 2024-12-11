@@ -7,11 +7,15 @@ inline auto mods_list_version = std::string();
 inline auto mods_list_ver_file = dirs::getModsDir() / ".list_version";
 
 inline Ref<Slider> loadingBar = nullptr;
+inline Ref<SimpleTextArea> statusLabel = nullptr;
 
 inline void downloadModsFromList(int id = 0, int attempts = 0, bool failed = 0) {
-    log::debug("{}(id {})", __func__, id);
+    log::debug("{}(id {}, attempts {}, failed {})", __func__, id, attempts, failed);
     auto url = mods_list[id];
     auto filename = fs::path(url).filename();
+    statusLabel->setText(fmt::format(
+        "{}\nurl: {}\nid: {}, attempts: {}, was failed: {}", filename, url, id, attempts, failed
+    ).c_str());
     auto req = web::WebRequest();
     auto listener = new EventListener<web::WebTask>;
     listener->bind(
@@ -22,7 +26,7 @@ inline void downloadModsFromList(int id = 0, int attempts = 0, bool failed = 0) 
                 if (retry and attempts <= 6) nextid = id;
                 else if (retry) isfailed = true;
                 if (mods_list.contains(nextid)) {
-                    downloadModsFromList(nextid, attempts + 1, isfailed);
+                    downloadModsFromList(nextid, not isfailed ? 0 : attempts + 1, isfailed);
                 }
                 else if (!isfailed) {
                     std::ofstream(mods_list_ver_file) << mods_list_version;
@@ -49,6 +53,7 @@ inline void downloadModsFromList(int id = 0, int attempts = 0, bool failed = 0) 
                         "", msg.data(), "miniSkull_001.png", 1);
                     AchievementNotifier::sharedState()->showNextAchievement();
                     log::error("{}", string::replace(msg, "\n", ""));
+                    statusLabel->setText(fmt::format("{}", string::replace(msg, "\n", "")).c_str());
                     return gonext(true);
                 }
             }
@@ -97,14 +102,24 @@ inline void getListAndStartDownloadingMods() {
                     auto popup = createQuickPopup(
                         "Downloading mods...",
                         "\n"
-                        "<cr>DON'T CLOSE THE GAME</c>""\n"
-                        "game will be restarted after finish",
-                        "a", "a", [](auto, auto) {}, false
+                        "<cr>DON'T CLOSE THE GAME!</c>""\n"
+                        "<co>Game will be restarted after finish.</c>",
+                        "e", "w", [](auto, auto) {}, false
                     );
+
                     popup->m_button1->setVisible(0);
                     popup->m_button2->setVisible(0);
+
                     loadingBar = Slider::create(popup, nullptr);
                     popup->m_buttonMenu->addChild(loadingBar);
+
+                    statusLabel = SimpleTextArea::create(
+                        "loading..?", "chatFont.fnt", 0.7f, popup->getContentWidth() - 120.f
+                    );
+                    statusLabel->setAnchorPoint({ 0.5f, 1.0f });
+                    statusLabel->setPositionY(-40.f);
+                    popup->m_buttonMenu->addChild(statusLabel);
+
                     popup->setContentSize(CCSize(1, 1) * 2222);
                     SceneManager::get()->keepAcrossScenes(popup);
                     downloadModsFromList();

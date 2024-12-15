@@ -43,7 +43,6 @@ class $modify(ParticleSnow, CCDirector) {
         if (!SETTING(bool, "Add Snow Particles")) return;
         shared_ref = CCParticleSnow::create();
         shared_ref->setBlendAdditive(true);
-        shared_ref->setFadeOutTime(0.5f);
         shared_ref->setID("snow_particle"_spr);
         shared_ref->schedule(schedule_selector(ParticleSnow::sch));
         SceneManager::get()->keepAcrossScenes(shared_ref);

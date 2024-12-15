@@ -203,6 +203,12 @@ class $modify(MenuGameLayerExt, MenuGameLayer) {
             }
         }
     }
+    $override cocos2d::ccColor3B getBGColor(int colorID) {
+        srand(time(0));
+        auto cid = rand() % 23;
+        auto color = reinterpret_cast<LevelSelectLayer*>(this)->colorForPage(cid);
+        return color;
+    }
 };
 
 #include <Geode/modify/MenuLayer.hpp>

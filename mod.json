@@ -8,7 +8,7 @@
 	},
 	"id": "user95401.gemetry_trash",
 	"name": "Gemetry Trash",
-	"version": "v3.0.0",
+	"version": "v3.1.0",
 	"developer": "user95401",
 	"description": "",
 	"early-load": true,
@@ -111,12 +111,22 @@
 			"type": "title",
 			"name": "Random Shit"
 		},
+		"Custom Color": {
+			"type": "rgb",
+			"name": "Custom Color",
+			"default": "#000000"
+		},
 		"Add Cursor Particles": {
 			"name": "Add Cursor Particles",
 			"description": "Add Cursor Particles....",
 			"type": "bool",
-			"default": true,
-			"requires-restart": true
+			"default": true
+		},
+		"Add Snow Particles": {
+			"name": "Add Snow Particles",
+			"description": "Add Snow Particles....",
+			"type": "bool",
+			"default": true
 		},
 		"Break Player Rotations At Plat": {
 			"name": "Break Player Rotations At Plat.",
@@ -169,6 +179,12 @@
 		"soggy cat?": {
 			"name": "soggy cat?",
 			"description": "soggy cat???",
+			"type": "bool",
+			"default": true
+		},
+		"redir request urls": {
+			"name": "redir request urls",
+			"description": "use original server by robtop",
 			"type": "bool",
 			"default": true
 		}

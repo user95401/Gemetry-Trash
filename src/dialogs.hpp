@@ -21,7 +21,7 @@ class $modify(DialogLayerExt, DialogLayer) {
             if (DialogIcon) {
                 this->m_characterSprite->addChild(DialogIcon);
                 this->m_characterSprite->setDisplayFrame(CCSpriteFrame::create(
-                    cocos::frameName(this->m_characterSprite).c_str(), CCRectZero)
+                    cocos::getFrameName(this->m_characterSprite).c_str(), CCRectZero)
                 );
                 this->m_characterSprite->setContentSize(DialogIcon->getContentSize());
             }

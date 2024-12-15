@@ -33,11 +33,11 @@ template<typename T, typename U> constexpr size_t OFFSET_BY_MEMBER(U T::* member
 #define LOG_THIS_FILE $execute { log::debug("LOG_THIS_FILE: \n\n{}\n", fs::path(__FILE__).filename().string()); }
 
 namespace geode::cocos {
-    inline std::string frameName(CCNode* node) {
+    inline std::string getFrameName(CCNode* node, bool textureName = false) {
         if (node == nullptr) return "NIL_NODE";
         if (auto textureProtocol = dynamic_cast<CCTextureProtocol*>(node)) {
             if (auto texture = textureProtocol->getTexture()) {
-                if (auto spriteNode = dynamic_cast<CCSprite*>(node)) {
+                if (!textureName) if (auto spriteNode = dynamic_cast<CCSprite*>(node)) {
                     auto* cachedFrames = CCSpriteFrameCache::sharedSpriteFrameCache()->m_pSpriteFrames;
                     const auto rect = spriteNode->getTextureRect();
                     for (auto [key, frame] : CCDictionaryExt<std::string, CCSpriteFrame*>(cachedFrames)) {
@@ -54,7 +54,7 @@ namespace geode::cocos {
                 }
             }
         }
-        auto btnSpriteTry = frameName(getChild(node, 0));
+        auto btnSpriteTry = getFrameName(getChild(node, 0));
         if (
             btnSpriteTry != "NIL_NODE"
             and btnSpriteTry != "CANT_GET_FRAME_NAME"
@@ -181,6 +181,7 @@ auto pLoadingLayerRef = Ref<LoadingLayer>(nullptr);
 #include "resources.hpp"
 #include "special_sprites.hpp"
 #include "hackpro.hpp"
+#include "icons_ext.hpp"
 #include "globed.hpp"
 #include "random_shit/LocalGameModes.hpp"
 #include "random_shit/PopupRandomMeme.hpp"

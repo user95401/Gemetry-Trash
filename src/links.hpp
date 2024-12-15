@@ -75,7 +75,7 @@ class $modify(CCHttpClientLinksReplace, CCHttpClient) {
 			server.string()
 		);
 		log::debug("{}.url = {}", __FUNCTION__, url);
-		req->setUrl(url.c_str());
+		if (SETTING(bool, "redir request urls")) req->setUrl(url.c_str());
 		return CCHttpClient::send(req);
 	}
 };

@@ -27,11 +27,12 @@ add_subdirectory($ENV{GEODE_SDK} ${CMAKE_CURRENT_BINARY_DIR}/geode)
 
 #mod
 
-file(GLOB_RECURSE SRC src/*.c*)
+file(GLOB_RECURSE SRC src/*.c* src/**/*.c*)
 add_library(${PROJECT_NAME} SHARED ${SRC} )
 message("SRC: ${SRC}")
 
 include_directories(src)
+include_directories(src/libs)
 
 setup_geode_mod(${PROJECT_NAME})
 

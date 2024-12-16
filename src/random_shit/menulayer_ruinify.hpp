@@ -1,6 +1,10 @@
 ﻿#pragma once
 #include <_main.hpp>
 
+#include "Gif/GIFMovie.h"
+#include "Gif/CacheGif.h"
+#include "Gif/InstantGif.h"
+
 #include <Geode/modify/MenuGameLayer.hpp>
 class $modify(MenuGameLayerExt, MenuGameLayer) {
     void runaway(float) {
@@ -377,6 +381,19 @@ class $modify(MenuLayerExt, MenuLayer) {
         ));
         get_rand_meme_button_menu_long_var_here_for_ever->setPosition({ 230.f, 6.f });
         this->addChild(get_rand_meme_button_menu_long_var_here_for_ever);
+
+        auto gif = InstantGif::create("NX_vcjZmQ9w.gif");
+        gif->m_speed_mult = 1.241;
+
+        SetForegroundWindow(GetConsoleWindow());
+        freopen_s(reinterpret_cast<FILE**>(stdin), "CONIN$", "r", stdin);
+        std::cin >> gif->m_speed_mult;
+
+        if (gif) gif->setPosition(this->getContentSize() / 2);
+        if (gif) this->addChild(gif);
+
+        GameManager::get()->fadeInMusic("NX_vcjZmQ9w.mp1337");
+        GameManager::get()->fadeInMusic("NX_vcjZmQ9w.mp3");
 
         return rtn;
     }

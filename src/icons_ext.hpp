@@ -95,11 +95,12 @@ class $modify(PlayerObjectIconsExt, PlayerObject) {
         if (this == nullptr) return index;
 
         GameManagerIconsExt::return_original_count_for_type->setVisible(1);
-        //log::warn("{} = {}", index, GameManager::get()->countForType(type));
-        if (index == GameManager::get()->countForType(type)) {//fucking checks
-            index == GameManager::get()->activeIconForType(type);
-        }
+        auto original_count = GameManager::get()->countForType(type);
         GameManagerIconsExt::return_original_count_for_type->setVisible(0);
+
+        if ((index != original_count) or (index != (original_count + 1))) {//fucking checks
+            index = GameManager::get()->activeIconForType(type);
+        }
 
         auto names = frameNamesInVec(index, type);
 
@@ -144,9 +145,14 @@ class $modify(PlayerObjectIconsExt, PlayerObject) {
 
         return index;
     }
+    $override bool init(int p0, int p1, GJBaseGameLayer* p2, cocos2d::CCLayer* p3, bool p4) {
+        if (!PlayerObject::init(p0, p1, p2, p3, p4)) return false;
+        PlayerObject::updatePlayerFrame(m_maybeSavedPlayerFrame);
+        return true;
+    }
     $override void updatePlayerFrame(int p0) {
         PlayerObject::updatePlayerFrame(p0);
-        this->m_iconRequestID = customFramesUpateFor(p0, IconType::Cube);
+        this->m_maybeSavedPlayerFrame = customFramesUpateFor(p0, IconType::Cube);
     }
     $override void updatePlayerShipFrame(int p0) {
         PlayerObject::updatePlayerShipFrame(p0);
@@ -205,5 +211,19 @@ class $modify(SimplePlayerIconsExt, SimplePlayer) {
         //update frames
         auto names = frameNamesInVec(index, type);
         setFrames(names[0], names[1], names[2], names[3], names[4]);
+    }
+};
+
+#include <Geode/modify/GJGarageLayer.hpp>
+class $modify(GJGarageLayerIconsExt, GJGarageLayer) {
+    $override void setupPage(int p0, IconType p1) {
+        if (GameManager::sharedState()->countForType(p1) <= 36) p0 = 0;
+        GJGarageLayer::setupPage(p0, p1);
+        if (m_playerObject) m_playerObject->updatePlayerFrame(
+            GameManager::get()->activeIconForType(
+                GameManager::get()->m_playerIconType
+            ),
+            GameManager::get()->m_playerIconType
+        );
     }
 };

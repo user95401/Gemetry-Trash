@@ -98,7 +98,7 @@ class $modify(PlayerObjectIconsExt, PlayerObject) {
         auto original_count = GameManager::get()->countForType(type);
         GameManagerIconsExt::return_original_count_for_type->setVisible(0);
 
-        if ((index != original_count) or (index != (original_count + 1))) {//fucking checks
+        if ((index == original_count) or (index == (original_count + 1))) {//fucking checks
             index = GameManager::get()->activeIconForType(type);
         }
 
@@ -140,7 +140,9 @@ class $modify(PlayerObjectIconsExt, PlayerObject) {
                 this->m_vehicleGlow->displayFrame()->getOriginalSize().height / this->m_vehicleGlow->getContentSize().height,
                 });
             if (m_vehicleSprite and type == IconType::Ufo) m_vehicleSprite->setPositionY(-8.f);
+            if (m_vehicleSprite and type == IconType::Ufo) m_vehicleGlow->setPositionY(-8.f);
             if (m_vehicleSprite and type == IconType::Ship) m_vehicleSprite->setPositionY(-6.f);
+            if (m_vehicleSprite and type == IconType::Ship) m_vehicleGlow->setPositionY(-6.f);
         };
 
         return index;

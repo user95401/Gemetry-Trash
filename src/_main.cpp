@@ -9,6 +9,15 @@ class $modify(CCSpriteExt, CCSprite) {
     };
 };
 
+#include <Geode/modify/CCString.hpp>
+class $modify(CCString) {
+    const char* getCString() {
+        //log::debug("{}(int:{})->{}", this, (int)this, __func__);
+        if ((int)this == 0) log::error("{}(int:{})->{}", this, (int)this, __func__);
+        return (int)this != 0 ? CCString::getCString() : CCString::createWithFormat("")->getCString();
+    }
+};
+
 #include <Geode/modify/GauntletSelectLayer.hpp>
 class $modify(GauntletSelectLayerFix, GauntletSelectLayer) {
     $override void setupGauntlets() {
@@ -95,6 +104,12 @@ class $modify(MouseAnchorPointExt, CCNode) {
             };
         };
 #ifdef GEODE_IS_WINDOWS
+        if (this->getID() == "iconic"_spr) {
+            auto pos = toCocos(ImGui::GetMousePos());
+            pos = this->convertToNodeSpace(pos);
+            this->setAnchorPoint(pos / this->getContentSize());
+            this->getScale() == 1.f ? this->setScale(1.05f) : void();
+        }
         if (auto casted = typeinfo_cast<MenuGameLayer*>(this)) {
             auto pos = toCocos(ImGui::GetMousePos());
             pos = casted->convertToNodeSpace(pos);

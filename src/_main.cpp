@@ -13,8 +13,8 @@ class $modify(CCSpriteExt, CCSprite) {
 class $modify(CCString) {
     const char* getCString() {
         //log::debug("{}(int:{})->{}", this, (int)this, __func__);
-        if ((int)this == 0) log::error("{}(int:{})->{}", this, (int)this, __func__);
-        return (int)this != 0 ? CCString::getCString() : CCString::createWithFormat("")->getCString();
+        if ((int)(size_t)this == 0) log::error("{}(int:{})->{}", this, (int)(size_t)this, __func__);
+        return (int)(size_t)this != 0 ? CCString::getCString() : CCString::createWithFormat("")->getCString();
     }
 };
 

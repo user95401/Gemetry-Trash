@@ -63,6 +63,10 @@ class $modify(GameManagerIconsExt, GameManager) {
         //log::debug("{}({}).rtn (original) = {}", __FUNCTION__, keyForType(p0), rtn);
 
         if (return_original_count_for_type->isVisible()) return rtn;
+        if (p0 == IconType::DeathEffect) return rtn;
+        if (p0 == IconType::Special) return rtn;
+        if (p0 == IconType::Item) return rtn;
+        if (p0 == IconType::ShipFire) return rtn;
 
         for (auto id = (rtn + 1); id <= (rtn + 255); id++) {
 
@@ -71,7 +75,7 @@ class $modify(GameManagerIconsExt, GameManager) {
 
             auto incr = false;
 
-            incr = simple_frame_names[0] != "emptyGlow.png" ? true : incr;
+            incr = std::string(simple_frame_names[0]) != "emptyGlow.png" ? true : incr;
             incr = CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(animated_part1_name) ? true : incr;
             
             if (incr) rtn += 1;
@@ -91,8 +95,6 @@ class $modify(PlayerObjectIconsExt, PlayerObject) {
             ->spriteFrameByName(name);
     }
     int customFramesUpateFor(int index, IconType type, bool forVehicle = false) {
-
-        if (this == nullptr) return index;
 
         GameManagerIconsExt::return_original_count_for_type->setVisible(1);
         auto original_count = GameManager::get()->countForType(type);

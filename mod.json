@@ -8,7 +8,7 @@
 	},
 	"id": "user95401.gemetry_trash",
 	"name": "Gemetry Trash",
-	"version": "v3.1.1-beta.3",
+	"version": "v3.1.1",
 	"developer": "user95401",
 	"description": "",
 	"early-load": true,
@@ -29,6 +29,9 @@
 			],
 			"PlayerExplosion_01": [
 				"resources/spritesheets/PlayerExplosion_01/**/*.png"
+			],
+			"icons": [
+				"resources/spritesheets/icons/**/*.png"
 			]
 		},
 		"files": [

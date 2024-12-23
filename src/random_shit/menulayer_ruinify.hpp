@@ -57,24 +57,23 @@ class $modify(MenuGameLayerExt, MenuGameLayer) {
         pulsebg->setColor({0,0,0});
         m_groundLayer->addChild(pulsebg, 10);
 
-        if (SETTING(bool, "Add Objects in Menu Game")) {
+        findFirstChildRecursive<CCNodeRGBA>(this,
+            [](CCNodeRGBA* node) {
+                auto parent_id = node->getParent()->getID();
+                auto __this_id = node->getID();
+                if (string::contains(parent_id, "ground-sprites")) {
+                    node->setColor({ 26, 26,26 });
+                }
+                if (string::contains(__this_id, "background")) {
+                    node->setColor({ 36, 36, 36 });
+                }
 
-            auto spike1 = GameObject::createWithKey(39);
-            spike1->setID("spike1");
-            spike1->setStartPos({ 462, 96 });
-            this->addChild(spike1);
+                return false;
+            }
+        );
 
-            auto spike2 = GameObject::createWithKey(8);
-            spike2->setID("spike2");
-            spike2->setStartPos({ 491, 105 });
-            this->addChild(spike2);
-
-            auto bump = typeinfo_cast<EffectGameObject*>(GameObject::createWithKey(35));
-            bump->setID("bump");
-            bump->createAndAddParticle(1, "bumpEffect.plist", 1, kCCPositionTypeGrouped);
-            bump->setStartPos({ 426, 92 });
-            this->addChild(bump);
-        }
+        this->scheduleOnce(schedule_selector(MenuGameLayerExt::updateColorCustom), 0.f);
+        this->schedule(schedule_selector(MenuGameLayerExt::updateColorCustom), 0.01f);
 
         return init_result;
     }
@@ -202,6 +201,12 @@ class $modify(MenuGameLayerExt, MenuGameLayer) {
                 ));
             }
         }
+    }
+    $override void updateColor(float p0) {
+        return p0 != 1337.f ? void() : MenuGameLayer::updateColor(p0);
+    }
+    void updateColorCustom(float p0) {
+        return MenuGameLayer::updateColor(1337.f);
     }
     $override cocos2d::ccColor3B getBGColor(int colorID) {
         srand(time(0));

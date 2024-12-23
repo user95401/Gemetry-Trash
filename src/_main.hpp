@@ -5,10 +5,6 @@ using namespace geode::prelude;
 
 #include <libs/CCLabelBMFontAnimated.h>
 
-#include <libs/Gif/GIFMovie.h>
-#include <libs/Gif/CacheGif.h>
-#include <libs/Gif/InstantGif.h>
-
 #include <regex>
 
 #include <_fs.hpp>
@@ -195,7 +191,6 @@ auto pLoadingLayerRef = Ref<LoadingLayer>(nullptr);
 #include "random_shit/menulayer_ruinify.hpp"
 #include "random_shit/game_ruinify.hpp"
 #include "random_shit/SoggyPop.hpp"
-#include "random_shit/NX_vcjZmQ9w.hpp"
 #include "random_shit/gtasa_map.hpp"
 #include "random_shit/menuitems.hpp"
 #include "random_shit/second_floor.hpp"

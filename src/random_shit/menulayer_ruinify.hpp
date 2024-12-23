@@ -62,18 +62,18 @@ class $modify(MenuGameLayerExt, MenuGameLayer) {
                 auto parent_id = node->getParent()->getID();
                 auto __this_id = node->getID();
                 if (string::contains(parent_id, "ground-sprites")) {
-                    node->setColor({ 26, 26,26 });
+                    node->setColor({ 0, 0,0 });
                 }
                 if (string::contains(__this_id, "background")) {
-                    node->setColor({ 36, 36, 36 });
+                    node->setColor({ 0, 0, 0 });
                 }
 
                 return false;
             }
         );
 
-        this->scheduleOnce(schedule_selector(MenuGameLayerExt::updateColorCustom), 0.f);
-        this->schedule(schedule_selector(MenuGameLayerExt::updateColorCustom), 0.01f);
+        updateColorCustom(0.f);
+        this->schedule(schedule_selector(MenuGameLayerExt::updateColorCustom), 5.0f);
 
         return init_result;
     }
@@ -203,10 +203,11 @@ class $modify(MenuGameLayerExt, MenuGameLayer) {
         }
     }
     $override void updateColor(float p0) {
+        log::debug("{}({})", __func__, p0);
         return p0 != 1337.f ? void() : MenuGameLayer::updateColor(p0);
     }
-    void updateColorCustom(float p0) {
-        return MenuGameLayer::updateColor(1337.f);
+    void updateColorCustom(float) {
+        return this->updateColor(1337.f);
     }
     $override cocos2d::ccColor3B getBGColor(int colorID) {
         srand(time(0));

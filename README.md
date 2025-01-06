@@ -3,7 +3,7 @@
 
 The server itself is anarchic in nature, allowing players to easily get moderator role or get level rated, creating a freewheeling environment.
 
-The mod itself includes a variety of fun and interesting features that diversify gameplay and the user interface:
+#### The mod itself includes a variety of fun and interesting features that diversify gameplay and the user interface:
 
 *   **Custom Textures and Visual Effects:** The mod change textures within the game, as well as introduce new graphical effects, such as a "jelly cube," robot rotations, and particles.
 

@@ -1,25 +1,55 @@
 {
-	"geode": "4.0.1",
+	"geode": "4.7.0",
+	"early-load": true,
 	"gd": {
 		"win": "2.2074",
 		"android": "2.2074",
 		"mac": "2.2074",
 		"ios": "2.2074"
 	},
-	"id": "user95401.gemetry_trash",
-	"name": "Gemetry Trash",
-	"version": "v3.1.1",
+	"id": "user95401.gemetry-trash",
+	"name": "Не гемерти трешь",
+	"version": "v4.0.0-beta.1",
 	"developer": "user95401",
 	"description": "",
-	"early-load": true,
 	"resources": {
+		"fonts": {
+			"geode.loader..mdFont": {
+				"path": "resources/fonts/Ubuntu-Regular.ttf",
+				"charset": "32-500,8226",
+				"size": 80
+			},
+			"geode.loader..mdFontB": {
+				"path": "resources/fonts/Ubuntu-Bold.ttf",
+				"charset": "32-126,1024-1279,8226",
+				"size": 80
+			},
+			"geode.loader..mdFontI": {
+				"path": "resources/fonts/Ubuntu-Italic.ttf",
+				"charset": "32-126,1024-1279,8226",
+				"size": 80
+			},
+			"geode.loader..mdFontBI": {
+				"path": "resources/fonts/Ubuntu-BoldItalic.ttf",
+				"charset": "32-126,1024-1279,8226",
+				"size": 80
+			},
+			"geode.loader..mdFontMono": {
+				"path": "resources/fonts/UbuntuMono-Regular.ttf",
+				"charset": "32-126,1024-1279,8226",
+				"size": 80
+			}
+		},
 		"sprites": [
 			"resources/sprites/*.png",
 			"resources/sprites/**/*.png"
 		],
 		"spritesheets": {
-			"SecretSheet": [
-				"resources/spritesheets/SecretSheet/**/*.png"
+			"GJ_GameSheet": [
+				"resources/spritesheets/GJ_GameSheet/**/*.png"
+			],
+			"GJ_GameSheet02": [
+				"resources/spritesheets/GJ_GameSheet02/**/*.png"
 			],
 			"GJ_GameSheet03": [
 				"resources/spritesheets/GJ_GameSheet03/**/*.png"
@@ -27,166 +57,40 @@
 			"GJ_GameSheet04": [
 				"resources/spritesheets/GJ_GameSheet04/**/*.png"
 			],
-			"PlayerExplosion_01": [
-				"resources/spritesheets/PlayerExplosion_01/**/*.png"
-			],
-			"icons": [
-				"resources/spritesheets/icons/**/*.png"
-			]
+			"SecretSheet": [
+				"resources/spritesheets/SecretSheet/**/*.png"
+      ]
 		},
 		"files": [
-			"resources/files/*",
-			"resources/files/**/*",
-			"resources/**/*.mpg",
-			"resources/**/*.mp3",
-			"resources/**/*.ogg",
-			"resources/**/*.wav",
-			"resources/**/*.plist",
-			"resources/**/*.gif",
-			"resources/**/*.rand",
-			"resources/**/*.sfx*",
-			"resources/**/**/*.mpg",
-			"resources/**/**/*.mp3",
-			"resources/**/**/*.ogg",
-			"resources/**/**/*.wav",
-			"resources/**/**/*.plist",
-			"resources/**/**/*.gif",
-			"resources/**/**/*.rand",
-			"resources/**/**/*.sfx*"
+			"resources/files/*.*",
+			"resources/files/**/*.*",
+			"resources/sprites/*.sfx_on_init",
+			"resources/sprites/**/*.sfx_on_init"
 		]
 	},
+	"dependencies": {
+		"alphalaneous.alphas_geode_utils": {
+			"version": ">=v1.1.5",
+			"importance": "suggested"
+		},
+		"alphalaneous.happy_textures": {
+			"version": ">=v2.0.7",
+			"importance": "suggested"
+		},
+		"user95401.game-objects-factory": {
+			"version": ">=v1.0.0",
+			"importance": "suggested"
+		},
+		"user95401.sprite-frames-unity": {
+			"version": ">=v1.0.0",
+			"importance": "suggested"
+		},
+		"user95401.gif-sprites": {
+			"version": ">=v2.0.0",
+			"importance": "suggested"
+		}
+	},
 	"settings": {
-		"Buttons": {
-			"type": "title",
-			"name": "Buttons"
-		},
-		"No Button UDare Dialog": {
-			"name": "No Button UDare Dialog",
-			"description": "remove button dialog appearance",
-			"type": "bool",
-			"default": false
-		},
-		"No Button Click Sound": {
-			"name": "No Button Click Sound",
-			"description": "remove sound on btn click",
-			"type": "bool",
-			"default": false
-		},
-		"Main Menu": {
-			"type": "title",
-			"name": "Main Menu"
-		},
-		"No Menu Game BG Pulse": {
-			"name": "No Menu Game BG Pulse",
-			"description": "No Menu Game BG Pulse",
-			"type": "bool",
-			"default": false
-		},
-		"No New Explode in Menu Game": {
-			"name": "No New Explode in Menu Game",
-			"description": "remove new explode effect for players in main menu",
-			"type": "bool",
-			"default": false
-		},
-		"No Players Destroyed Counter": {
-			"name": "No Players Destroyed Counter",
-			"description": "remove new explode effect for players in main menu",
-			"type": "bool",
-			"default": false
-		},
-		"Freese Menu Game BG when Platformered": {
-			"name": "Freese Menu Game BG when Platformered",
-			"description": "Freese Menu Game BG when PlatformeredFreese Menu Game BG when PlatformeredFreese Menu Game BG when PlatformeredFreese Menu Game BG when Platformered....",
-			"type": "bool",
-			"default": true
-		},
-		"No Platformer in Menu Game": {
-			"name": "No Platformer in Menu Game",
-			"description": "no....",
-			"type": "bool",
-			"default": false
-		},
-		"Animate Menu Game": {
-			"name": "Animate Menu Game",
-			"description": "^v<><><^^^vvas<><><>....",
-			"type": "bool",
-			"default": true
-		},
-		"Random Shit": {
-			"type": "title",
-			"name": "Random Shit"
-		},
-		"Custom Color": {
-			"type": "rgb",
-			"name": "Custom Color",
-			"default": "#000000"
-		},
-		"Add Cursor Particles": {
-			"name": "Add Cursor Particles",
-			"description": "Add Cursor Particles....",
-			"type": "bool",
-			"default": true
-		},
-		"Add Snow Particles": {
-			"name": "Add Snow Particles",
-			"description": "Add Snow Particles....",
-			"type": "bool",
-			"default": true
-		},
-		"Break Player Rotations At Plat": {
-			"name": "Break Player Rotations At Plat.",
-			"description": "asd....",
-			"type": "bool",
-			"default": true
-		},
-		"Funny Robot Rotation": {
-			"name": "Funny Robot Rotation",
-			"description": "robot rotation acts like ship.",
-			"type": "bool",
-			"default": true
-		},
-		"Boost Rotation Thing": {
-			"name": "Boost Rotation Thing",
-			"description": "Boost Rotation ThingBoost Rotation ThingBoost Rotation ThingBoost Rotation ThingBoost Rotation Thing.",
-			"type": "bool",
-			"default": true
-		},
-		"jelly cube": {
-			"name": "jelly cube",
-			"description": "jelly cube.",
-			"type": "bool",
-			"default": true
-		},
-		"play loading theme at resource loading": {
-			"name": "play loading theme at resource loading",
-			"description": "play loading theme at resource loading.",
-			"type": "bool",
-			"default": true
-		},
-		"Update Scene Scale By Screen View": {
-			"name": "Update Scene Scale By Screen View",
-			"description": "Update Scene Scale By Screen View.",
-			"type": "bool",
-			"default": true
-		},
-		"Editor Cave Sounds": {
-			"name": "Editor Cave Sounds",
-			"description": "Editor Cave Sounds.",
-			"type": "bool",
-			"default": true
-		},
-		"Show Random Meme After Loading": {
-			"name": "Show Random Meme After Loading",
-			"description": "Show Random Meme After Loading.",
-			"type": "bool",
-			"default": true
-		},
-		"soggy cat?": {
-			"name": "soggy cat?",
-			"description": "soggy cat???",
-			"type": "bool",
-			"default": true
-		},
 		"redir request urls": {
 			"name": "redir request urls",
 			"description": "use original server by robtop",

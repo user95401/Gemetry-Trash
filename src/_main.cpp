@@ -1,8 +1,59 @@
-#include "_main.hpp"
+﻿#include "_main.hpp"
+
+#include <Geode/modify/GJGameLoadingLayer.hpp>
+class $modify(GJGameLoadingLayerWhatTheF, GJGameLoadingLayer) {
+    inline static Ref<EditLevelLayer> sex;
+    void xdddd(float) {
+        if (!sex) return;
+        if (!this) return;
+        if (!typeinfo_cast<GJGameLoadingLayer*>(this)) return;
+        if (!this->isRunning()) return;
+        this->m_editor ? sex->onEdit(sex) : sex->onPlay(sex);
+    }
+    void xd(float) {
+        if (!this) return;
+        if (!typeinfo_cast<GJGameLoadingLayer*>(this)) return;
+        if (!this->isRunning()) return;
+        if (this->m_level) {
+            sex = EditLevelLayer::create(this->m_level);
+            this->getParent()->addChild(sex, -999);
+            this->scheduleOnce(schedule_selector(GJGameLoadingLayerWhatTheF::xdddd), 0.01f);
+		}
+    }
+    virtual void onEnter() {
+		GJGameLoadingLayer::onEnter();
+        if (!this) return;
+        if (!typeinfo_cast<GJGameLoadingLayer*>(this)) return;
+        if (this->m_level) {
+            GameManager::get()->playMenuMusic();
+            this->addChild(geode::createLayerBG());
+            this->scheduleOnce(schedule_selector(GJGameLoadingLayerWhatTheF::xd), 5.f);
+            auto text = CCLabelBMFont::create(
+                R"(Если ты застреваешь тут более 5 секунд 
+то РобТоп хуесоооооссс)", "bigFont.fnt"
+            );
+            text->setOpacity(0);
+            text->runAction(CCFadeIn::create(5.f));
+            text->setAlignment(kCCTextAlignmentCenter);
+            text->setPosition(this->getContentSize() / 2);
+            limitNodeSize(text, this->getContentSize(), 0.6f, 0.3f);
+            this->addChild(text);
+        }
+    };
+};
+
+#include <Geode/modify/GameManager.hpp>
+class $modify(GameManagerSetsForGV, GameManager) {
+    bool getGameVariable(char const* p0) {
+        if (p0 == std::string("0095")) return true; //just dont
+        if (p0 == std::string("0024")) return true; //show mouse
+        return GameManager::getGameVariable(p0);
+    };
+};
 
 #include <Geode/modify/CCSprite.hpp>
-class $modify(CCSpriteExt, CCSprite) {
-    $override virtual bool initWithTexture(CCTexture2D * pTexture) {
+class $modify(CCSpriteNilTextureFix, CCSprite) {
+    bool initWithTexture(CCTexture2D * pTexture) {
         //log::debug("{}({})", __FUNCTION__, pTexture);
         //if (pTexture) log::debug("pTexture Name: {}", pTexture->getName());
         return pTexture != nullptr ? CCSprite::initWithTexture(pTexture) : init();
@@ -10,17 +61,17 @@ class $modify(CCSpriteExt, CCSprite) {
 };
 
 #include <Geode/modify/CCString.hpp>
-class $modify(CCString) {
+class $modify(CCStringNilFix, CCString) {
     const char* getCString() {
         //log::debug("{}(int:{})->{}", this, (int)this, __func__);
-        if ((int)(size_t)this == 0) log::error("{}(int:{})->{}", this, (int)(size_t)this, __func__);
-        return (int)(size_t)this != 0 ? CCString::getCString() : CCString::createWithFormat("")->getCString();
+        if ((size_t)this == 0) log::error("{}(int:{})->{}", this, (size_t)this, __func__);
+        return (size_t)this != 0 ? CCString::getCString() : CCString::createWithFormat("")->getCString();
     }
 };
 
 #include <Geode/modify/GauntletSelectLayer.hpp>
-class $modify(GauntletSelectLayerFix, GauntletSelectLayer) {
-    $override void setupGauntlets() {
+class $modify(GauntletSelectLayerPosFix, GauntletSelectLayer) {
+    void setupGauntlets() {
         GauntletSelectLayer::setupGauntlets();
         findFirstChildRecursive<ExtendedLayer>(this,
             [](ExtendedLayer* gauntlet_pages) {
@@ -33,55 +84,10 @@ class $modify(GauntletSelectLayerFix, GauntletSelectLayer) {
     };
 };
 
-#include <Geode/modify/CCDirector.hpp>
-class $modify(ParticleSnow, CCDirector) {
-    static inline Ref<CCParticleSnow> shared_ref;
-    void sch(float) {
-        auto hide = false;
-        auto order = getChild(shared_ref->getParent(), -1)->getZOrder();
-        if (auto game = GameManager::get()->m_gameLayer) {
-            hide = game->isRunning();
-            order = 0;
-        }
-        hide = SETTING(bool, "Add Snow Particles") ? hide : true;
-        shared_ref->CCNode::setVisible(not hide);
-        shared_ref->setZOrder(order);
-    }
-    $override void runWithScene(CCScene * pScene) {
-        CCDirector::runWithScene(pScene);
-        if (!SETTING(bool, "Add Snow Particles")) return;
-        shared_ref = CCParticleSnow::create();
-        shared_ref->setBlendAdditive(true);
-        shared_ref->setID("snow_particle"_spr);
-        shared_ref->schedule(schedule_selector(ParticleSnow::sch));
-        SceneManager::get()->keepAcrossScenes(shared_ref);
-    }
-};
-
-#include <Geode/modify/LevelSelectLayer.hpp>
-class $modify(CustomPagesColor, LevelSelectLayer) {
-    static inline Ref<CCParticleSnow> shared_ref;
-    $override cocos2d::ccColor3B colorForPage(int colorID) {
-        if (typeinfo_cast<LevelSelectLayer*>(this)) return LevelSelectLayer::colorForPage(colorID);
-        auto rgb = Mod::get()->getSettingValue<cocos2d::ccColor3B>("Custom Color");
-        return rgb == ccBLACK ? LevelSelectLayer::colorForPage(colorID) : rgb;
-    }
-};
-
-#include <Geode/modify/MenuGameLayer.hpp>
-class $modify(CustomMenuGameColor, MenuGameLayer) {
-    static inline Ref<CCParticleSnow> shared_ref;
-    $override cocos2d::ccColor3B getBGColor(int colorID) {
-        auto rgb = Mod::get()->getSettingValue<cocos2d::ccColor3B>("Custom Color");
-        return rgb == ccBLACK ? MenuGameLayer::getBGColor(colorID) : rgb;
-    }
-};
-
 #include <Geode/modify/CCNode.hpp>
 class $modify(UpdateSceneScaleByScreenView, CCNode) {
-    $override void visit() {
+    void visit() {
         CCNode::visit();
-        if (!SETTING(bool, "Update Scene Scale By Screen View")) return;
         if (auto game = GameManager::get()->m_gameLayer) if (game->isRunning()) return;
         if (auto gameplay = GameManager::get()->m_playLayer) if (gameplay->isRunning() or gameplay->m_isPaused) return;
         if (auto casted = typeinfo_cast<CCScene*>(this)) {
@@ -94,85 +100,46 @@ class $modify(UpdateSceneScaleByScreenView, CCNode) {
 
 #include <Geode/modify/CCNode.hpp>
 class $modify(MouseAnchorPointExt, CCNode) {
-    $override void visit() {
+    void visit() {
         CCNode::visit();
         if (auto casted = typeinfo_cast<FLAlertLayer*>(this)) {
-            if (casted->m_mainLayer) {
-                if (casted->m_mainLayer->getContentSize().equals(CCDirector::get()->getWinSize())) {
-                    casted->m_mainLayer->setAnchorPoint(toCocos(ImGui::GetMousePos()) / casted->m_mainLayer->getContentSize());
+            if (auto layer = casted->m_mainLayer) {
+                if (layer->getContentSize().equals(CCDirector::get()->getWinSize())) {
+                    layer->setAnchorPoint(toCocos(ImGui::GetMousePos()) / layer->getContentSize());
                 }
             };
         };
-#ifdef GEODE_IS_WINDOWS
-        if (this->getID() == "iconic"_spr) {
-            auto pos = toCocos(ImGui::GetMousePos());
-            pos = this->convertToNodeSpace(pos);
-            this->setAnchorPoint(pos / this->getContentSize());
-            this->getScale() == 1.f ? this->setScale(1.05f) : void();
-        }
-        if (auto casted = typeinfo_cast<MenuGameLayer*>(this)) {
-            auto pos = toCocos(ImGui::GetMousePos());
-            pos = casted->convertToNodeSpace(pos);
-            casted->setAnchorPoint(pos / casted->getContentSize());
-            if (SETTING(bool, "Animate Menu Game")) void();
-            else casted->getScale() == 1.f ? casted->setScale(1.005f) : void();
-        };
-#endif
     }
 };
 
 #ifdef GEODE_IS_WINDOWS
-
-#include <Geode/modify/AppDelegate.hpp>
-class $modify(WindowNameExt, AppDelegate) {
-    void updateForegroundWindow() {
-        SetWindowTextA(GetForegroundWindow(), fmt::format(
-            "{} {}",
-            getMod()->getName(), 
-            getMod()->getVersion().toVString()
-        ).data());
-    }
-    $override void applicationWillEnterForeground() {
-        updateForegroundWindow();
-        return AppDelegate::applicationWillEnterForeground();
-    };
-    $override bool applicationDidFinishLaunching() {
-        updateForegroundWindow();
-        return AppDelegate::applicationDidFinishLaunching();
-    };
-};
 
 #include <Geode/modify/CCDirector.hpp>
-class $modify(MouseParticle, CCDirector) {
+class $modify(EnumWindowsExt, CCDirector) {
 public:
-    static inline Ref<CCParticleSystemQuad> shared_ref;
-    static inline Ref<CCMoveTo> moveactref = CCMoveTo::create(0.001f, { -10, -10 });
-    void sch(float) {
-        auto pos = CCScene::get()->convertToNodeSpace(getMousePos());
-        moveactref->initWithDuration(moveactref->getDuration(), pos);
-        shared_ref->runAction(moveactref);
-        auto hide = false;
-        auto order = getChild(shared_ref->getParent(), -1)->getZOrder();
-        if (auto game = GameManager::get()->m_gameLayer) {
-            hide = game->isRunning();
-            order = 0;
+    static BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam) {
+        DWORD pid;
+        GetWindowThreadProcessId(hwnd, &pid);
+        if (pid == GetCurrentProcessId()) {
+            char title[256];
+            GetWindowTextA(hwnd, title, sizeof(title));
+            if (strlen(title) > 0) {
+                if (title == std::string("Geometry Dash")) SetWindowTextW(
+                    hwnd, string::utf8ToWide(fmt::format(
+                        "{} {}",
+                        getMod()->getName(),
+                        getMod()->getVersion().toVString()
+                    )).c_str()
+                );
+            }
         }
-        hide = SETTING(bool, "Add Cursor Particles") ? hide : true;
-        hide ? shared_ref->stopSystem() : shared_ref->resumeSystem();
-        shared_ref->setZOrder(order);
+        return TRUE;
     }
-    $override void runWithScene(CCScene* pScene) {
+    void runWithScene(CCScene* pScene) {
+        EnumWindows(EnumWindowsProc, 0);
         CCDirector::runWithScene(pScene);
-        if (!SETTING(bool, "Add Cursor Particles")) return;
-        CCSpriteFrameCache::get()->addSpriteFramesWithFile("GJ_ParticleSheet.plist", "GJ_ParticleSheet.png");
-        shared_ref = GameToolbox::particleFromString(
-            "200a-1a0.54a0.94a-1a90a180a0a20a1a1a0a0a0a0a0a0a1a2a0a0a0.211765a0.1a0.207843a0.1a0.207843a0.1a1a0a0a0a0a0a0a0a0a0a0a0a1a0a0a0a0a0a0a0a10a0a0a0a1a1a1a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0"
-            , CCParticleSystemQuad::create(), 0);
-        shared_ref->setID("mouse_particle"_spr);
-        shared_ref->schedule(schedule_selector(MouseParticle::sch));
-        pScene->addChild(shared_ref);
-        SceneManager::get()->keepAcrossScenes(shared_ref);
     };
 };
+$execute{ SetWindowTextW(GetConsoleWindow(), LR"(консось)"); }
 
 #endif

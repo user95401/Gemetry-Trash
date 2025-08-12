@@ -49,7 +49,7 @@ bool fontHasAllCharsForStr(const std::string& file, const std::string& str) {
 
     if (not charsets.contains(file)) {
         auto content = file::readString(
-            CCFileUtils::get()->fullPathForFilename(file.c_str(), 0)
+            CCFileUtils::get()->fullPathForFilename(file.c_str(), 0).c_str()
         ).unwrapOrDefault();
         std::unordered_set<uint32_t> charset;
         std::istringstream stream(content);
@@ -98,7 +98,7 @@ bool shouldUpdateWithTranslation(CCNode* node, const char* str) {
 
     // Загружаем replaces
     if (!CCFileUtils::get()->m_fullPathCache.contains("_loc.json")) replaces = file::readJson(
-        CCFileUtils::get()->fullPathForFilename("_loc.json", 0)
+        CCFileUtils::get()->fullPathForFilename("_loc.json", 0).c_str()
     ).unwrap();
 
     auto translation = replaces[str].asString().unwrapOrDefault();

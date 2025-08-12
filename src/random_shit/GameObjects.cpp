@@ -176,13 +176,13 @@ class $modify(MenuItemGameObjectExt, EffectGameObject) {
 				auto item = CCMenuItem::create();
 				//virtual void spawnGroup(int group, bool ordered, double delay, gd::vector<int> const& remapKeys, int triggerID, int controlID);
 				item->onActivate([game = Ref(GameManager::get()->m_gameLayer), data = Ref(MenuItemObjectData(__this))] {
-					if (game) game->spawnGroup(data->get("activate").asInt().unwrapOr(0), false, 0, {}, -1, -1);
+					if (game) game->spawnGroup(data->get("activate").asInt().unwrapOr(0), false, 0, gd::vector<int>(), -1, -1);
 					});
 				item->onSelected([game = Ref(GameManager::get()->m_gameLayer), data = Ref(MenuItemObjectData(__this))] {
-					if (game) game->spawnGroup(data->get("selected").asInt().unwrapOr(0), false, 0, {}, -1, -1);
+					if (game) game->spawnGroup(data->get("selected").asInt().unwrapOr(0), false, 0, gd::vector<int>(), -1, -1);
 					});
 				item->onUnselected([game = Ref(GameManager::get()->m_gameLayer), data = Ref(MenuItemObjectData(__this))] {
-					if (game) game->spawnGroup(data->get("unselected").asInt().unwrapOr(0), false, 0, {}, -1, -1);
+					if (game) game->spawnGroup(data->get("unselected").asInt().unwrapOr(0), false, 0, gd::vector<int>(), -1, -1);
 					});
 				item->setUserObject("menu-item-object", __this);
 

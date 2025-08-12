@@ -36,8 +36,8 @@ class $modify(FMODAudioEngineResourcesExt, FMODAudioEngine) {
 
 #include <Geode/modify/LoadingLayer.hpp>
 class $modify(LoadingLayerResourcesExt, LoadingLayer) {
-	static auto pathQ(fs::path file) {
-		auto name = string::pathToString(file.filename());
+	static auto pathQ(fs::path path) {
+		auto name = string::pathToString(path);
 		size_t qstart = name.find('[');
 		size_t qend = name.find(']', qstart);
 		auto query = (qstart != std::string::npos && qend != std::string::npos) ?
@@ -68,7 +68,7 @@ class $modify(LoadingLayerResourcesExt, LoadingLayer) {
 			auto ext = string::toLower(string::pathToString(entry.path().extension()));
 
 			if (string::containsAll(name, { "__unzip", ".zip" })) {
-				auto unzipPath = string::pathToString(query);
+				auto unzipPath = query;
 
 				auto forced = string::contains(name, "_forced");
 
@@ -171,27 +171,28 @@ class $modify(LoadingLayerResourcesExt, LoadingLayer) {
 				);
 			}
 		}
+		if (CCKeyboardDispatcher::get()->getControlKeyPressed()) {
+			ImGuiCocosExt::id_mapped_drawings.erase("RAND_FILENAMES_LIST");
+			ImGuiCocosExt::id_mapped_drawings["RAND_FILENAMES_LIST"] = (
+				[] -> void {
+					bool windopn = true;
+					ImGui::Begin("RAND_FILENAMES_LIST", &windopn);
 
-		ImGuiCocosExt::id_mapped_drawings.erase("RAND_FILENAMES_LIST");
-		ImGuiCocosExt::id_mapped_drawings["RAND_FILENAMES_LIST"] = (
-			[] -> void {
-				bool windopn = true;
-				ImGui::Begin("RAND_FILENAMES_LIST", &windopn);
+					if (!windopn) return (void)ImGuiCocosExt::id_mapped_drawings.erase("RAND_FILENAMES_LIST");
 
-				if (!windopn) return (void)ImGuiCocosExt::id_mapped_drawings.erase("RAND_FILENAMES_LIST");
-
-				for (const auto& entry : RAND_FILENAMES_LIST) {
-					if (ImGui::TreeNode(entry.first.c_str())) {
-						for (const auto& name : entry.second) {
-							ImGui::Text("%s", string::pathToString(name).c_str());
+					for (const auto& entry : RAND_FILENAMES_LIST) {
+						if (ImGui::TreeNode(entry.first.c_str())) {
+							for (const auto& name : entry.second) {
+								ImGui::Text("%s", string::pathToString(name).c_str());
+							}
+							ImGui::TreePop();
 						}
-						ImGui::TreePop();
 					}
-				}
 
-				ImGui::End();
-			}
-		);
+					ImGui::End();
+				}
+				);
+		};
 	}
 	bool init(bool penis) {
 		resourceSetup();

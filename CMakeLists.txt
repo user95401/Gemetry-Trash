@@ -33,11 +33,8 @@ include(${CMAKE_CURRENT_BINARY_DIR}/geode-download-dependency.cmake)
 
 download_dependency_mod(user95401/geode-game-objects-factory user95401.game-objects-factory)
 
-setup_geode_mod(${PROJECT_NAME} EXTERNALS user95401.sprite-frames-unity user95401.game-objects-factory)
+setup_geode_mod(${PROJECT_NAME} EXTERNALS user95401.game-objects-factory)
 
 #ImGui lol
 CPMAddPackage("gh:matcool/gd-imgui-cocos#fbd4103")
 target_link_libraries(${PROJECT_NAME} imgui-cocos)
-
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /utf-8")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /utf-8")

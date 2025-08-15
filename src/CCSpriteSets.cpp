@@ -1,4 +1,4 @@
-#pragma once
+
 #include <_main.hpp>
 //LOG_THIS_FILE;
 
@@ -24,7 +24,7 @@ class $modify(SpecialSprites, CCSprite) {
         }
     }
     void sfx_on_init(std::string name) {
-        auto sfx_path = fmt::format("{}/{}.sfx_on_init", getMod()->getResourcesDir(), name);
+        auto sfx_path = fmt::format("{}.sfx_on_init", name);
         if (fs::exists(sfx_path)) FMODAudioEngine::get()->playEffect(sfx_path);
     }
     $override bool initWithSpriteFrameName(const char* pszSpriteFrameName) {

@@ -1,9 +1,7 @@
 ﻿#pragma once
-#include <Geode/Geode.hpp>
-#include <Geode/ui/GeodeUI.hpp>
-#include <alphalaneous.alphas_geode_utils/include/Utils.h>
-using namespace geode::prelude;
+#include <_main.hpp>
 
+#include <alphalaneous.alphas_geode_utils/include/Utils.h>
 #include <regex>
 
 $execute{ GEODE_WINDOWS(SetConsoleOutputCP(65001)); };
@@ -95,6 +93,8 @@ bool fontHasAllCharsForStr(const std::string& file, const std::string& str) {
 
 bool shouldUpdateWithTranslation(CCNode* node, const char* str) {
     if (!node || !str) return false; // nullptr любимый
+
+    if (SETTING(bool, "disable text replaces")) return false;
 
     // Загружаем replaces
     if (!CCFileUtils::get()->m_fullPathCache.contains("_loc.json")) replaces = file::readJson(
@@ -199,6 +199,7 @@ translation = string::replace(translation, orig, repl)
 
     auto parentsTree = getNodeParentsTree(node, TreeMapType::TypeNames);
 
+    if (parentsTree.contains("TooltipNode")) return false;
     if (parentsTree.contains("MultilineBitmapFont")) return false;
 
     auto isInpPlaceholder = false;

@@ -1,6 +1,7 @@
 #pragma once
 #include <_main.hpp>
 #include <_ImGui.hpp>
+#include <misc/cpp/imgui_stdlib.h>
 
 static inline auto RAND_FILENAMES_LIST = std::map<std::string, std::vector<fs::path>>();
 
@@ -23,6 +24,7 @@ class $modify(CCFileUtilsResourcesExt, CCFileUtils) {
 class $modify(FMODAudioEngineResourcesExt, FMODAudioEngine) {
 	int playEffectAdvanced(gd::string strPath, float speed, float p2, float volume, float pitch, bool fastFourierTransform, bool reverb, int startMillis, int endMillis, int fadeIn, int fadeOut, bool loopEnabled, int p12, bool override, bool p14, int p15, int uniqueID, float minInterval, int sfxGroup) {
 		auto name = string::pathToString(strPath.c_str());
+
 		if (RAND_FILENAMES_LIST.contains(name)) {
 			auto names = RAND_FILENAMES_LIST[name];
 			name = string::pathToString(
@@ -30,7 +32,17 @@ class $modify(FMODAudioEngineResourcesExt, FMODAudioEngine) {
 			).c_str();
 		}
 		if (strPath.c_str() != name) log::debug(R"(changed "{}" to "{}" for full path)", strPath.c_str(), name);
-		return FMODAudioEngine::playEffectAdvanced(name.c_str(), speed, p2, volume, pitch, fastFourierTransform, reverb, startMillis, endMillis, fadeIn, fadeOut, loopEnabled, p12, override, p14, p15, uniqueID, minInterval, sfxGroup);
+
+		if (string::contains(strPath.c_str(), "explode_11.ogg")) FMODAudioEngine::playEffectAdvanced(
+			rndb() ? strPath : (std::string("/") + strPath.c_str()).c_str(), 
+			speed, p2, volume, pitch, fastFourierTransform, reverb, startMillis,
+			endMillis, fadeIn, fadeOut, loopEnabled, p12, override, p14, p15, uniqueID, minInterval, sfxGroup
+		);
+
+		return FMODAudioEngine::playEffectAdvanced(
+			name.c_str(), speed, p2, volume, pitch, fastFourierTransform, reverb, startMillis,
+			endMillis, fadeIn, fadeOut, loopEnabled, p12, override, p14, p15, uniqueID, minInterval, sfxGroup
+		);
 	}
 };
 
@@ -173,8 +185,8 @@ class $modify(LoadingLayerResourcesExt, LoadingLayer) {
 		}
 		if (CCKeyboardDispatcher::get()->getControlKeyPressed()) {
 			ImGuiCocosExt::id_mapped_drawings.erase("RAND_FILENAMES_LIST");
-			ImGuiCocosExt::id_mapped_drawings["RAND_FILENAMES_LIST"] = (
-				[] -> void {
+			ImGuiCocosExt::id_mapped_drawings["RAND_FILENAMES_LIST"] = [] -> void
+				{
 					bool windopn = true;
 					ImGui::Begin("RAND_FILENAMES_LIST", &windopn);
 
@@ -190,12 +202,85 @@ class $modify(LoadingLayerResourcesExt, LoadingLayer) {
 					}
 
 					ImGui::End();
-				}
-				);
+				};
+			ImGuiCocosExt::id_mapped_drawings["RESOURCE_TOOLS"] = [] -> void
+				{
+					bool windopn = true;
+					ImGui::Begin("RESOURCE_TOOLS", &windopn);
+					if (!windopn) return (void)ImGuiCocosExt::id_mapped_drawings.erase("RESOURCE_TOOLS");
+					
+					auto targetDir = dirs::getModsDir();
+					auto shouldDoArchives = false;
+
+					ImGui::SeparatorText("Archives creator");
+
+					auto archiveFilePrefix = getMod()->getSavedValue<std::string>("archiveFilePrefix", "__unzip[{game}..mods] --part");
+					if (ImGui::InputText("file prefix", &archiveFilePrefix)) getMod()->setSavedValue("archiveFilePrefix", archiveFilePrefix);
+
+					if (ImGui::Button("run for mods dir")) {
+						shouldDoArchives = true;
+						targetDir = dirs::getModsDir();
+					}
+
+					if (ImGui::Button("run for temp dir")) {
+						shouldDoArchives = true;
+						targetDir = dirs::getTempDir();
+					}
+
+
+					if (shouldDoArchives) {
+						getMod()->uninstall();
+
+						constexpr uintmax_t MB24 = 24 * 1024 * 1024;
+						std::vector<std::vector<fs::path>> parts;
+						uintmax_t currentPartSize = 0;
+						std::vector<fs::path> currentPart;
+
+						auto files = fs::readDirectory(targetDir).unwrapOrDefault();
+
+						files.erase(std::remove_if(files.begin(), files.end(), 
+							[](const fs::path& p) { return fs::is_directory(p); }
+						), files.end());
+
+						for (const auto& entry : files) {
+							uintmax_t fileSize = fs::file_size(entry, fs::err);
+
+							if (fileSize > MB24) continue;
+
+							if (currentPartSize + fileSize > MB24) {
+								parts.push_back(std::move(currentPart));
+								currentPart.clear();
+								currentPartSize = 0;
+							}
+
+							currentPart.push_back(entry);
+							currentPartSize += fileSize;
+						}
+
+						if (!currentPart.empty()) {
+							parts.push_back(std::move(currentPart));
+						}
+
+						auto zipOutDir = dirs::getTempDir().parent_path() / "makdzipsingtps";
+						fs::remove_all(zipOutDir, fs::err);
+						fs::create_directories(zipOutDir, fs::err);
+						for (int i = 0; i < parts.size(); i++) {
+							auto zipper = fs::Zip::create(zipOutDir / fmt::format("{}{}.zip", archiveFilePrefix, i + 1));
+							if (zipper.isOk()) for (const auto& file : parts[i]) zipper.unwrap().addFrom(file);
+						}
+						fs::openFolder(zipOutDir);
+					}
+
+					ImGui::End();
+				};
 		};
 	}
 	bool init(bool penis) {
+		// fix black textures while image plus installed (force-autodetect)
+		if (auto mod = Loader::get()->getInstalledMod("prevter.imageplus")) mod->setSettingValue("force-autodetect", false);
+		// setup
 		resourceSetup();
+		// yes
 		return LoadingLayer::init(penis);
 	}
 };
@@ -203,7 +288,8 @@ class $modify(LoadingLayerResourcesExt, LoadingLayer) {
 #include <Geode/modify/MenuLayer.hpp>
 class $modify(MenuLayerResourcesExt, MenuLayer) {
 	bool init() {
-		auto deps = getMod()->getMetadata().getDependencies();
+
+		auto deps = getMod()->getMetadataRef().getDependencies();
 		for (const auto& dep : deps) {
 			if (!Loader::get()->isModInstalled(dep.id)) game::restart(
 				[dep] { log::warn("{} isn't installed, restarting", dep.id); return 1; }()
@@ -225,8 +311,97 @@ class $modify(MenuLayerResourcesExt, MenuLayer) {
 					);
 					geode::openInfoPopup(dep.id);
 					}));
+				menu->setAnchorPoint(CCPointZero);
+				menu->setScaleX(1.200f);
+				menu->setScaleY(0.175f);
 			};
 		}
+
+		auto hmmm = fileExistsInSearchPaths((getMod()->getTempDir() / GEODE_MOD_ID".android64.so").string().c_str());
+		if (CCKeyboardDispatcher::get()->getControlKeyPressed() or hmmm) {
+			auto get_release_data_listener = new EventListener<web::WebTask>;
+
+			get_release_data_listener->bind(
+				[this, get_release_data_listener](web::WebTask::Event* e) {
+					if (web::WebProgress* prog = e->getProgress()) {
+						//log::debug("{}", prog->downloadTotal());
+
+						if (prog->downloadTotal() > 0) void(); else return;
+
+						auto installed_size = fs::file_size(getMod()->getPackagePath(), fs::err);
+						auto actual_size = prog->downloadTotal();
+
+						if (installed_size == actual_size) return;
+
+						auto pop = geode::createQuickPopup(
+							"Update!",
+							fmt::format(
+								"Latest release size mismatch with installed one :D"
+								"\n" "Download latest release of mod?"
+							),
+							"Later.", "Yes", [this](CCNode* pop, bool Yes) {
+								if (!Yes) return;
+
+								this->setVisible(0);
+
+								auto req = web::WebRequest();
+
+								auto state_win = Notification::create("Downloading... (///%)");
+								state_win->setTime(1337.f);
+								state_win->show();
+
+								if (state_win->m_pParent) {
+									state_win->m_pParent->addChild(geode::createLayerBG());
+								}
+
+								auto listener = new EventListener<web::WebTask>;
+								listener->bind(
+									[state_win](web::WebTask::Event* e) {
+										if (web::WebProgress* prog = e->getProgress()) {
+											auto strr = fmt::format("Downloading... ({}%)", (int)prog->downloadProgress().value_or(000));
+											static std::string last_str;
+											if (last_str != strr) { last_str = strr; state_win->setString(strr); }
+										}
+										if (web::WebResponse* res = e->getValue()) {
+											std::string data = res->string().unwrapOr("no res");
+											if (res->code() < 399) {
+												log::debug("{}", res->into(getMod()->getPackagePath()).err());
+												game::restart();
+											}
+											else {
+												auto asd = geode::createQuickPopup(
+													"Request exception",
+													data,
+													"Nah", nullptr, 420.f, nullptr, false
+												);
+												asd->show();
+											};
+										}
+									}
+								);
+
+								listener->setFilter(req.send(
+									"GET",
+									repo_lnk + "/releases/latest/download/" GEODE_MOD_ID ".geode"
+								));
+
+							}, false
+						);
+						pop->m_scene = this;
+						pop->show();
+
+						e->cancel();
+						get_release_data_listener->disable();
+						delete get_release_data_listener;
+					}
+				}
+			);
+			get_release_data_listener->setFilter(
+				web::WebRequest().get(repo_lnk + "/releases/latest/download/" GEODE_MOD_ID ".geode")
+			);
+		}
+		else Notification::create("Update check was aborted because it's a dev build...")->show();
+
 		return MenuLayer::init();
 	}
 };

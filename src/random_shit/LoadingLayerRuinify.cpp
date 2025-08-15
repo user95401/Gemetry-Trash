@@ -1,4 +1,4 @@
-﻿#pragma once
+﻿
 #include <_main.hpp>
 
 #include <Geode/modify/LoadingLayer.hpp>
@@ -18,7 +18,10 @@ class $modify(LoadingLayerRuinifyExt, LoadingLayer) {
             auto colorID = rand() % 23;
             auto color = reinterpret_cast<LevelSelectLayer*>(bg)->colorForPage(colorID);
             bg->setColor(color);
+            bg->setZOrder(-10);
         }
+
+        if (rndb()) this->addChild(geode::createLayerBG(), -5);
 
         FMODAudioEngine::get()->setBackgroundMusicVolume(GameManager::get()->m_bgVolume);
         FMODAudioEngine::get()->setEffectsVolume(GameManager::get()->m_sfxVolume);
@@ -33,7 +36,7 @@ class $modify(LoadingLayerRuinifyExt, LoadingLayer) {
                     "Geode: {}",
                     GEODE_PLATFORM_NAME,
                     Mod::get()->getVersion().toVString(),
-                    Mod::get()->getMetadata().getGeodeVersion().toVString()
+                    Mod::get()->getMetadataRef().getGeodeVersion().toVString()
                 ).c_str(),
                 fmt::format("gjFont{:02d}.fnt", rand() % 60).c_str()
             );

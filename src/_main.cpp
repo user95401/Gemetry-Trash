@@ -1,5 +1,18 @@
 ﻿#include "_main.hpp"
 
+#include <Geode/modify/LevelSearchLayer.hpp>
+class $modify(LevelSearchLayerBackSpritesFix, LevelSearchLayer) {
+    bool init(int p0) {
+        if (!LevelSearchLayer::init(p0)) return false;
+        for (auto id : {
+            "level-search-bg", "quick-search-bg", "difficulty-filters-bg", "length-filters-bg"
+            }) if (auto ew = this->querySelector(id)) {
+            ew->setContentWidth(this->getContentSize().width * 2);
+        }
+        return true;
+    };
+};
+
 #include <Geode/modify/GJGameLoadingLayer.hpp>
 class $modify(GJGameLoadingLayerWhatTheF, GJGameLoadingLayer) {
     inline static Ref<EditLevelLayer> sex;
@@ -30,7 +43,9 @@ class $modify(GJGameLoadingLayerWhatTheF, GJGameLoadingLayer) {
             this->scheduleOnce(schedule_selector(GJGameLoadingLayerWhatTheF::xd), 5.f);
             auto text = CCLabelBMFont::create(
                 R"(Если ты застреваешь тут более 5 секунд 
-то РобТоп хуесоооооссс)", "bigFont.fnt"
+то РобТоп хуесоооооссс
+
+(кажется он стапает это место из за неопознанных объектов))", "bigFont.fnt"
             );
             text->setOpacity(0);
             text->runAction(CCFadeIn::create(5.f));

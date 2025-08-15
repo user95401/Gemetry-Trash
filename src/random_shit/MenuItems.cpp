@@ -1,4 +1,4 @@
-﻿#pragma once
+﻿
 #include <_main.hpp>
 
 #include <Geode/modify/CCMenuItemSprite.hpp>

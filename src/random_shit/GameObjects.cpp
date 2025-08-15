@@ -5,6 +5,77 @@
 void SetupObjects();
 $on_mod(Loaded) { SetupObjects(); }
 inline void SetupObjects() {
+	GameObjectsFactory::createTriggerConfig(
+		UNIQ_ID("plr-input-crtl"), "edit_ePlayerControlExtBtn_001.png",
+		[](EffectGameObject* object, GJBaseGameLayer* game, int, gd::vector<int> const*) {
+			GameOptionsTrigger* options = typeinfo_cast<GameOptionsTrigger*>(object);
+			if (!options) return log::error("options object cast == {} from {}", options, object);
+			//option assignments
+			typedef GameOptionsSetting Is;
+			auto player = options->m_streakAdditive;
+			auto jump = options->m_hideGround;
+			auto left = options->m_hideMG;
+			auto right = options->m_hideP1;
+			//affected players
+			std::vector<Ref<PlayerObject>> ps = { game->m_player1, game->m_player2 };
+			if (player != Is::Disabled) ps = {
+				player == Is::On ? game->m_player1 : game->m_player2
+			};
+			//jump
+			if (jump != Is::Disabled) for (auto p : ps) if (p) p->m_jumpBuffered = jump == Is::On;
+			//left
+			if (left != Is::Disabled) for (auto p : ps) if (p) p->m_holdingLeft = left == Is::On;
+			//right
+			if (right != Is::Disabled) for (auto p : ps) if (p) p->m_holdingRight = right == Is::On;
+		}
+	)->refID(2899)->insertIndex((12 * 7) + 1)->onEditObject(
+		[](EditorUI* a, GameObject* aa) -> bool {
+			queueInMainThread(
+				[a = Ref(a), aa = Ref(aa)] {
+					if (!CCScene::get()) return log::error("CCScene::get() == {}", CCScene::get());
+					auto popup = CCScene::get()->getChildByType<SetupOptionsTriggerPopup>(0);
+					if (!popup) return log::error("popup == {}", popup);
+					auto object = typeinfo_cast<EffectGameObject*>(aa.data());
+					if (!object) return log::error("object == {} ({})", object, aa);
+
+					auto main = popup->m_mainLayer;
+					auto menu = popup->m_buttonMenu;
+
+					if (auto aaa = main->getChildByType<CCLabelBMFont>(0)) aaa->setString("Extended Player Control");
+
+					//xd
+					if (auto aaa = main->getChildByType<CCLabelBMFont>(6 - 2)) aaa->setString(R"(Только для игрока)");
+					if (auto aaa = main->getChildByType<CCLabelBMFont>(7 - 2)) aaa->setString(R"(1)");
+					if (auto aaa = main->getChildByType<CCLabelBMFont>(8 - 2)) aaa->setString(R"(2)");
+					//jump buffer
+					if (auto aaa = main->getChildByType<CCLabelBMFont>(9 - 2)) aaa->setString(R"(Буфер прыжка)");
+					//holding left
+					if (auto aaa = main->getChildByType<CCLabelBMFont>(12 - 2)) aaa->setString(R"(Держится лево)");
+					//holding right
+					if (auto aaa = main->getChildByType<CCLabelBMFont>(15 - 2)) aaa->setString(R"(Держится право)");
+
+					//other shit
+					{
+						auto low_iq = 18;
+						while (auto aaa = main->getChildByType<CCNode>(low_iq++)) aaa->setVisible(false);
+					};
+
+					//other shit in menu
+					{
+						auto low_iq = 13;
+						while (auto aaa = menu->getChildByType<CCNode>(low_iq++)) aaa->setVisible(false);
+					};
+
+					if (auto aaa = menu->getChildByType<InfoAlertButton>(0)) aaa->m_title = (R"(Оно)");
+					if (auto aaa = menu->getChildByType<InfoAlertButton>(0)) aaa->m_description = std::vector<std::string>{
+						R"(На самом деле не дёргает за письки, но с его помощью )" 
+						R"(ты можешь устанавливать состояние основных инпутов управления игрока.)" 
+					}[0].c_str();
+				}
+			);
+			return false;
+		}
+	)->registerMe();
 }
 
 #include <Geode/modify/EffectGameObject.hpp>
@@ -23,9 +94,9 @@ class $modify(MenuItemGameObjectExt, EffectGameObject) {
 		std::function<void(void)> m_onActivate = []() {};
 		std::function<void(void)> m_onSelected = []() {};
 		std::function<void(void)> m_onUnselected = []() {};
-		virtual void activate() { log::debug("{}()", __FUNCTION__); if (m_onActivate) m_onActivate(); };
-		virtual void selected() { log::debug("{}()", __FUNCTION__); if (m_onSelected) m_onSelected(); };
-		virtual void unselected() { log::debug("{}()", __FUNCTION__); if (m_onUnselected) m_onUnselected(); };
+		virtual void activate() { if (m_onActivate) m_onActivate(); };
+		virtual void selected() { if (m_onSelected) m_onSelected(); };
+		virtual void unselected() { if (m_onUnselected) m_onUnselected(); };
 		auto onActivate(std::function<void(void)> onActivate) { m_onActivate = onActivate; return this; }
 		auto onSelected(std::function<void(void)> onSelected) { m_onSelected = onSelected; return this; }
 		auto onUnselected(std::function<void(void)> onUnselected) { m_onUnselected = onUnselected; return this; }
@@ -103,15 +174,17 @@ class $modify(MenuItemGameObjectExt, EffectGameObject) {
 		unselectedLabel->setScale(0.5f);
 		unselected->getInputNode()->addChild(unselectedLabel);
 
-		if (auto aaa = menu->getChildByType<InfoAlertButton>(0)) aaa->m_title = (R"(Да)");
-		if (auto aaa = menu->getChildByType<InfoAlertButton>(0)) aaa->m_description = (R"(Это рил кнопка как в менюшках гд. 
-Спавнит группу именно когда получает клик на себя!)");
+		if (auto aaa = menu->getChildByType<InfoAlertButton>(0)) aaa->m_title = (R"(Да.)");
+		if (auto aaa = menu->getChildByType<InfoAlertButton>(0)) aaa->m_description = std::vector<std::string>{
+			R"(Это рил кнопка как в менюшках гд.)""\n"
+			R"(Спавнит группу именно когда получает клик на себя!)"
+		} [0] .c_str();
 	}
 
 	static void setup() {
 		conf = GameObjectsFactory::createRingConfig(
 			UNIQ_ID("menu-item"), "edit_eMenuItemBtn_001.png"
-		)->refID(3640)->tab(12)->onEditObject(
+		)->refID(3640)->tab(12)->insertIndex((12*6)+3)->onEditObject(
 			[](EditorUI* a, GameObject* aa) -> bool {
 				queueInMainThread(
 					[a = Ref(a), aa = Ref(aa)] {
@@ -263,15 +336,15 @@ public:
 	std::function<void(enumKeyCodes key)> m_keyUp = [](enumKeyCodes) {};
 };
 
-#include <Geode/modify/SetupEventLinkPopup.hpp>
-class $modify(SetupEventLinkPopupExt, SetupEventLinkPopup) {
-	bool init(EventLinkTrigger * p0, cocos2d::CCArray * p1) {
-		if (!SetupEventLinkPopup::init(p0, p1)) return false;
-
+#include <Geode/modify/SelectEventLayer.hpp>
+class $modify(SelectEventLayerKeysExt, SelectEventLayer) {
+	bool init(SetupEventLinkPopup* p0, gd::set<int>&p1) {
+		if (!SelectEventLayer::init(p0, p1)) return false;
+		
 		auto keyEventsExpandBtn = CCMenuItemExt::createToggler(
 			ButtonSprite::create("Keys", "goldFont.fnt", "GJ_button_04.png", 0.6f),
 			ButtonSprite::create("Keys", "goldFont.fnt", "GJ_button_02.png", 0.6f),
-			[popup = Ref(this), object = Ref(p0)](CCMenuItemToggler* keyEventsExpandBtn) {
+			[popup = Ref(this)](CCMenuItemToggler* keyEventsExpandBtn) {
 
 				while (auto a = popup->m_buttonMenu->getChildByID("key-list-item")) a->removeFromParent();
 				while (auto a = popup->getChildByType<KeyEventListener>(0)) a->removeFromParent();
@@ -280,12 +353,13 @@ class $modify(SetupEventLinkPopupExt, SetupEventLinkPopup) {
 
 				auto posY = keyEventsExpandBtn->getPositionY() + keyEventsExpandBtn->getContentSize().height + 4.f;
 
-				for (auto eventID : object->m_eventIDs) if (eventID >= 120000 and eventID < 130000) {
+				for (auto eventID : popup->m_eventIDs) if (eventID >= 120000 and eventID < 130000) {
 					std::string name = CCKeyboardDispatcher::get()->keyToString((enumKeyCodes)(eventID - 120000));
 					auto item = CCMenuItemExt::createSpriteExtra(
 						ButtonSprite::create((" " + name + " ").c_str(), "goldFont.fnt", "GJ_button_05.png", 0.5f)
-						, [object = Ref(object), eventID, keyEventsExpandBtn](void*) {
-							object->m_eventIDs.erase(eventID);
+						, [popup, eventID, keyEventsExpandBtn](void*) {
+							popup->m_eventIDs.erase(eventID);
+							popup->m_eventsChanged = true;
 							keyEventsExpandBtn->activate();
 							keyEventsExpandBtn->activate();
 						}
@@ -307,8 +381,9 @@ class $modify(SetupEventLinkPopupExt, SetupEventLinkPopup) {
 				);
 
 				popup->addChild(KeyEventListener::create()->onKeyDown(
-					[object = Ref(object), keyEventsExpandBtn](enumKeyCodes key) {
-						if (object) object->m_eventIDs.insert(120000 + (int)key);
+					[popup, keyEventsExpandBtn](enumKeyCodes key) {
+						popup->m_eventIDs.insert(120000 + (int)key);
+						popup->m_eventsChanged = true;
 						keyEventsExpandBtn->activate();
 						keyEventsExpandBtn->activate();
 					}

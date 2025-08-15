@@ -1,4 +1,4 @@
-﻿#pragma once
+﻿
 #include <_main.hpp>
 
 #include <Geode/modify/MenuGameLayer.hpp>
@@ -115,6 +115,11 @@ class $modify(MenuLayerRuinifyExt, MenuLayer) {
 
         auto rtn = MenuLayer::init();
 
+        if (rndb()) {
+            if (auto game = this->getChildByType<MenuGameLayer>(0)) game->setZOrder(-10);
+            this->addChild(geode::createLayerBG(), -1);
+        }
+
         //remove unused links
         if (auto node = this->getChildByIDRecursive("facebook-button")) node->setVisible(0);
         if (auto node = this->getChildByIDRecursive("twitter-button")) node->setVisible(0);
@@ -201,7 +206,7 @@ class $modify(MenuLayerRuinifyExt, MenuLayer) {
                     "Geode: {}",
                     GEODE_PLATFORM_NAME,
                     Mod::get()->getVersion().toVString(),
-                    Mod::get()->getMetadata().getGeodeVersion().toVString()
+                    Mod::get()->getMetadataRef().getGeodeVersion().toVString()
                 ).c_str(),
                 fmt::format("gjFont{:02d}.fnt", rand() % 60).c_str()
             );
@@ -245,7 +250,7 @@ class $modify(MenuLayerRuinifyExt, MenuLayer) {
 сексуальный и весьма поражающий контент. 
 Ничего тут не строит воспринимать всерьёз. 
 Вас предупредили, наслаждайтесь.)"
-, NotificationIcon::None, 10.f)->show();
+, NotificationIcon::None, 6.66f)->show();
 
             auto logo = "../../../user95401.gemetry-trash/logo.png";
             CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFrame(

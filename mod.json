@@ -9,7 +9,7 @@
 	},
 	"id": "user95401.gemetry-trash",
 	"name": "Не гемерти трешь",
-	"version": "v4.0.0-beta.1",
+	"version": "v4.0.0-beta.2",
 	"developer": "user95401",
 	"description": "",
 	"resources": {
@@ -78,15 +78,11 @@
 			"importance": "suggested"
 		},
 		"user95401.game-objects-factory": {
-			"version": ">=v1.0.0",
+			"version": ">=v1.1.0",
 			"importance": "suggested"
 		},
 		"user95401.sprite-frames-unity": {
 			"version": ">=v1.0.0",
-			"importance": "suggested"
-		},
-		"user95401.gif-sprites": {
-			"version": ">=v2.0.0",
 			"importance": "suggested"
 		}
 	},
@@ -96,6 +92,11 @@
 			"description": "use original server by robtop",
 			"type": "bool",
 			"default": true
+		},
+		"disable text replaces": {
+			"name": "disable text replaces",
+			"type": "bool",
+			"default": false
 		}
 	}
 }
